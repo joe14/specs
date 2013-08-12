@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter version="5.0" xml:id="dda"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns6="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook"
+         xmlns:m="http://www.w3.org/1998/Math/MathML">
+  <title>Direct Data Access Functions</title>
+
+  <titleabbrev>Direct Data Access</titleabbrev>
+
+  <section>
+    <remark><para>This entire chapter is new in this version of the document.
+    Much of the content herein is copied from the corresponding chapter in the
+    VSIPL++ specification. -- JPD3</para></remark>
+  
+    <title>Introduction</title>
+    
+    <para>Direct Data Access (DDA) provides the means to access block data
+    via raw pointers, independent of how the block holds the data. This
+    proxy access can be used to bridge locally with code expecting raw
+    pointers without breaking the block abstraction.</para>
+  </section>
+
+  <section>
+    <title>Fundamentals</title>
+    
+    <para>The implementation may provide direct access to the block's own
+    storage, or a temporary copy may be created. In either case, the memory
+    to which the DDA raw pointers refer is in the VSIPL space. There is a third
+    case: user space memory is provided and the DDA pointers refer to that user
+    space memory instead.</para>
+    
+    <para>If VSIPL space or user space memory other than the block's own
+    storage is used, data must be synchronized between the block's own storage
+    and the <emphasis>DDA buffer</emphasis>. The data synchronization paradigm
+    is described in more detail below. </para>
+    
+    <remark><para>Should we clarify terms here?</para>
+      <itemizedlist>
+        <listitem>
+          <para>VSIPL space memory bound to the block,</para>
+        </listitem>
+        <listitem>
+          <para>temporary VSIPL memory serving as a buffer for DDA, </para>
+        </listitem>
+        <listitem>
+          <para>user space memory serving as a buffer for DDA</para>
+        </listitem>
+      </itemizedlist>
+    <para>-- JPD3</para>
+    </remark>
+  </section>
+
+  <section>
+    <title>Type Definitions</title>
+    
+    <section>
+      <title><code>vsip_dda_sync_policy_t</code></title>
+      
+      <para>As indicated above, if DDA provides access to the block via VSIPL
+      space or user space memory other than the block's own memory (i.e. the
+      VSIPL space memory bound to the block), data must be synchronized between
+      the DDA buffer and the block's own memory. When and to/ from where that
+      synchronization occurs is specified by a synchronization policy.</para>
+      
+      <para>Blocks may be accessed via DDA as input (read-only), output
+      (write-only), or input and output (read-write). In addition, user space
+      memory through which the block data is to be accessed may be
+      provided.</para>
+      
+      <remark><para>We need to rethink the synchronization policy and tailor it
+      for a C implementation (versus the C++ implementation) since we can't
+      really leverage construction/ destruction-time operations. -- JPD3</para>
+      </remark>
+
+      <synopsis>
+typedef unsigned <emphasis role="bold">vsip_dda_sync_policy_t</emphasis>;
+
+vsip_dda_sync_policy_t const <emphasis role="bold">vsip_dda_sync_policy_in</emphasis> = 0x01;
+vsip_dda_sync_policy_t const <emphasis role="bold">vsip_dda_sync_policy_out</emphasis> = 0x02;
+vsip_dda_sync_policy_t const <emphasis role="bold">vsip_dda_sync_policy_inout</emphasis> = in | out;
+vsip_dda_sync_policy_t const <emphasis role="bold">vsip_dda_sync_policy_copy</emphasis> = 0x04;
+        </synopsis>
+
+      <para>Policy flags may be OR'ed together. A policy with neither the
+      <constant>in</constant> nor the <constant>out</constant> flag set is
+      invalid.</para>
+
+      <para>An <constant>in</constant> policy indicates that the block is
+      treated as input. Data must be synchronized with a call to
+      <function>vsip_dda_<replaceable>d</replaceable>synchronize_
+      <replaceable>p</replaceable>()</function> prior to the first
+      access.</para>
+
+      <para>An <constant>out</constant> policy indicates that the block is
+      treated as output. Data must be synchronized with a call to
+      <function>vsip_dda_<replaceable>d</replaceable>synchronize_
+      <replaceable>p</replaceable>()</function> after the last access.</para>
+      
+      <remark><para>How can we enforce this? -- JPD3 </para></remark>
+
+      <para>If the <constant>out</constant> policy is used without the
+      <constant>in</constant> policy, the DDA buffer data may not be
+      initialized, and should be treated as write-only.</para>
+
+      <para>A <constant>copy</constant> policy expresses that the block should
+      be copied into separate VSIPL space or user space memory (i.e. a DDA
+      buffer), even if the implementation would otherwise provide a pointer to
+      block-internal storage.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Functions</title>
+
+    <informaltable>
+      <tgroup cols="2">
+        <thead>
+          <row>
+            <entry>Function</entry>
+            <entry>Description</entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry><function>vsip_dda_<replaceable>d</replaceable>required_buffer_size_<replaceable>p</replaceable></function></entry>
+            <entry>Buffer Size Accessor</entry>
+          </row>
+          <row>
+            <entry><function>vsip_dda_<replaceable>d</replaceable>cost_<replaceable>p</replaceable></function></entry>
+            <entry>Cost Accessor</entry>
+          </row>
+          <row>
+            <entry><function>vsip_dda_<replaceable>d</replaceable>synchronize_<replaceable>p</replaceable></function></entry>
+            <entry>Block/ DDA Buffer Data Synchronization</entry>
+          </row>
+          <row>
+            <entry><function>vsip_dda_<replaceable>d</replaceable>ptr_<replaceable>p</replaceable></function></entry>
+            <entry>Pointer Accessor</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </informaltable>
+
+    <section>
+      <title><function>vsip_dda_<replaceable>d</replaceable>required_buffer_size_<replaceable>p</replaceable></function></title>
+      
+      <para>This function gets the size of buffer required for direct data
+      access.</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Prototypes</term>
+          <listitem>
+            <synopsis>
+vsip_length vsip_dda_required_buffer_size_<replaceable>f</replaceable>(vsip_block_<replaceable>f</replaceable> *block,
+                                            vsip_dda_sync_policy sync_policy);
+
+vsip_length vsip_dda_crequired_buffer_size_<replaceable>f</replaceable>(vsip_cblock_<replaceable>f</replaceable> *block,
+                                             vsip_dda_sync_policy sync_policy);
+
+vsip_length vsip_dda_required_buffer_size_<replaceable>i</replaceable>(vsip_block_<replaceable>i</replaceable> *block,
+                                            vsip_dda_sync_policy sync_policy);
+
+vsip_length vsip_dda_crequired_buffer_size_<replaceable>i</replaceable>(vsip_cblock_<replaceable>i</replaceable> *block,
+                                             vsip_dda_sync_policy sync_policy);
+
+vsip_length vsip_dda_required_buffer_size_bl(vsip_block_bl *block,
+                                             vsip_dda_sync_policy sync_policy);
+
+vsip_length vsip_dda_required_buffer_size_vi(vsip_block_vi *block,
+                                             vsip_dda_sync_policy sync_policy);
+                                     
+vsip_length vsip_dda_required_buffer_size_mi(vsip_block_mi *block,
+                                             vsip_dda_sync_policy sync_policy);
+                                     
+vsip_length vsip_dda_required_buffer_size_ti(vsip_block_ti *block,
+                                             vsip_dda_sync_policy sync_policy);
+            </synopsis>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Arguments</term>
+          <listitem>
+            <variablelist>
+              <varlistentry>
+                <term>block</term>
+                <listitem>
+                  <para>Pointer to a block object</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>sync_policy</term>
+                <listitem>
+                  <para>The synchronization policy to use for the associated
+                  DDA buffer</para>
+                </listitem>
+              </varlistentry>
+            </variablelist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Return Value</term>
+          <listitem>
+            <para>The size of a buffer required to hold the block's data while
+            it is accessed via DDA</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Errors</term>
+          <listitem>
+            <para>The arguments must conform to the following:</para>
+            <orderedlist>
+              <listitem>
+                <para>The block object must be valid, and</para>
+              </listitem>
+              <listitem>
+                <para>The synchronization policy must be valid.</para>
+              </listitem>
+            </orderedlist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Notes/References</term>
+          <listitem>
+            <para>The return value is zero if no buffer is required because
+            the DDA object will provide a pointer to the block's internal
+            storage rather than creating a copy.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Examples</term>
+          <listitem>
+            <para/>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>See Also</term>
+          <listitem>
+            <para/>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
+    <section>
+      <title>
+        <function>vsip_dda_<replaceable>d</replaceable>cost_<replaceable>p</replaceable></function>
+      </title>
+    </section>
+    
+    <section>
+      <title><function>vsip_dda_<replaceable>d</replaceable>synchronize_<replaceable>p</replaceable></function></title>
+      
+      <para>This function synchronizes the DDA buffer with the block's own
+      storage.</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Prototypes</term>
+          <listitem>
+            <synopsis>
+int vsip_dda_synchronize_<replaceable>f</replaceable>(vsip_block_<replaceable>f</replaceable> *block,
+                           vsip_dda_sync_policy sync_policy);
+
+int vsip_dda_csynchronize_<replaceable>f</replaceable>(vsip_cblock_<replaceable>f</replaceable> *block,
+                            vsip_dda_sync_policy sync_policy);
+
+int vsip_dda_synchronize_<replaceable>i</replaceable>(vsip_block_<replaceable>i</replaceable> *block,
+                           vsip_dda_sync_policy sync_policy);
+
+int vsip_dda_csynchronize_<replaceable>i</replaceable>(vsip_cblock_<replaceable>i</replaceable> *block,
+                             vsip_dda_sync_policy sync_policy);
+
+int vsip_dda_synchronize_bl(vsip_block_bl *block,
+                            vsip_dda_sync_policy sync_policy);
+
+int vsip_dda_synchronize_vi(vsip_block_vi *block,
+                            vsip_dda_sync_policy sync_policy);
+                                     
+int vsip_dda_synchronize_mi(vsip_block_mi *block,
+                            vsip_dda_sync_policy sync_policy);
+                                     
+int vsip_dda_synchronize_ti(vsip_block_ti *block,
+                            vsip_dda_sync_policy sync_policy);
+            </synopsis>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Arguments</term>
+          <listitem>
+            <variablelist>
+              <varlistentry>
+                <term>block</term>
+                <listitem>
+                  <para>Pointer to a block object</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>sync_policy</term>
+                <listitem>
+                  <para>The synchronization policy to use for the associated
+                  DDA buffer</para>
+                </listitem>
+              </varlistentry>
+            </variablelist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Return Value</term>
+          <listitem>
+            <para>0 on success and non-zero on failure</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Errors</term>
+          <listitem>
+            <para>The arguments must conform to the following:</para>
+            <orderedlist>
+              <listitem>
+                <para>The block object must be valid.</para>
+              </listitem>
+            </orderedlist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Notes/References</term>
+          <listitem>
+            <para/>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Examples</term>
+          <listitem>
+            <para/>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>See Also</term>
+          <listitem>
+            <para/>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
+    <section>
+      <title><function>vsip_dda_<replaceable>d</replaceable>ptr_<replaceable>p</replaceable></function></title>
+
+      <para>This function gets the pointer for direct data access.</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Prototypes</term>
+          <listitem>
+            <synopsis>
+vsip_scalar_<replaceable>f</replaceable> *vsip_dda_ptr_<replaceable>f</replaceable>(vsip_block_<replaceable>f</replaceable> *block,
+                              vsip_dda_sync_policy sync_policy,
+                              vsip_scalar_<replaceable>f</replaceable> *buffer);
+
+vsip_scalar_<replaceable>f</replaceable> *vsip_dda_cptr_<replaceable>f</replaceable>(vsip_cblock_<replaceable>f</replaceable> *block,
+                               vsip_dda_sync_policy sync_policy,
+                               vsip_scalar_<replaceable>f</replaceable> *buffer);
+
+vsip_scalar_<replaceable>i</replaceable> *vsip_dda_ptr_<replaceable>i</replaceable>(vsip_block_<replaceable>i</replaceable> *block,
+                              vsip_dda_sync_policy sync_policy,
+                              vsip_scalar_<replaceable>i</replaceable> *buffer);
+
+vsip_scalar_<replaceable>i</replaceable> *vsip_dda_cptr_<replaceable>i</replaceable>(vsip_cblock_<replaceable>i</replaceable> *block,
+                               vsip_dda_sync_policy sync_policy,
+                               vsip_scalar_<replaceable>i</replaceable> *buffer);
+
+vsip_scalar_bl *vsip_dda_ptr_bl(vsip_block_bl *block,
+                                vsip_dda_sync_policy sync_policy,
+                                vsip_scalar_bl *buffer);
+
+vsip_scalar_vi *vsip_dda_ptr_vi(vsip_block_vi *block,
+                                vsip_dda_sync_policy sync_policy,
+                                vsip_scalar_vi *buffer);
+
+vsip_scalar_mi *vsip_dda_ptr_mi(vsip_block_mi *block,
+                                vsip_dda_sync_policy sync_policy,
+                                vsip_scalar_mi *buffer);
+
+vsip_scalar_ti *vsip_dda_ptr_ti(vsip_block_ti *block,
+                                vsip_dda_sync_policy sync_policy,
+                                vsip_scalar_ti *buffer);
+            </synopsis>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Arguments</term>
+          <listitem>
+            <variablelist>
+              <varlistentry>
+                <term>block</term>
+                <listitem>
+                  <para>Pointer to a block object</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>sync_policy</term>
+                <listitem>
+                  <para>The synchronization policy to use for the associated
+                  DDA buffer</para>
+                </listitem>
+              </varlistentry>
+              <varlistentry>
+                <term>buffer</term>
+                <listitem>
+                  <para>Pre-allocated user space memory for use by the VSIPL
+                  implementation when providing direct access to the data;
+                  this memory must be at least as big as the size reported by
+                  <function>vsip_dda_<replaceable>d</replaceable>buffer_size_<replaceable>p</replaceable>()</function></para>
+                </listitem>
+              </varlistentry>
+            </variablelist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Return Value</term>
+          <listitem>
+            <para>The pointer for direct data access or NULL on failure</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Errors</term>
+          <listitem>
+            <para>The arguments must conform to the following:</para>
+            <orderedlist>
+              <listitem>
+                <para>The block object must be valid.</para>
+              </listitem>
+            </orderedlist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Notes/References</term>
+          <listitem>
+            <para/>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Examples</term>
+          <listitem>
+            <para/>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>See Also</term>
+          <listitem>
+            <para/>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+  </section>
+</chapter>

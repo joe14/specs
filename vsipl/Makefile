@@ -10,7 +10,7 @@
 
 vsipl_src:= vsipl.xml acknowledgment.xml glossary.xml intro.xml concepts.xml
 vsipl_src+= types.xml support.xml scalar.xml random.xml vector.xml signal.xml
-vsipl_src+= linalg.xml io.xml impl.xml
+vsipl_src+= linalg.xml io.xml dda.xml impl.xml
 
 src:=$(vsipl_src)
 

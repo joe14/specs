@@ -559,4 +559,10 @@ symbol is used as the hyphenation character:
 
 </xsl:template>
 
+<xsl:template match="d:remark">
+  <fo:inline font-style="italic" color="red">
+    <xsl:call-template name="inline.charseq"/>
+  </fo:inline>
+</xsl:template>
+
 </xsl:stylesheet>
