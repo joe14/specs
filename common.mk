@@ -5,7 +5,7 @@
 ########################################################################
 
 xsltproc := xsltproc
-fop := /usr/local/apache/fop-1.1/fop
+fop := fop
 
 ########################################################################
 # Build instructions
@@ -34,7 +34,7 @@ define generate_xhtml
 mkdir -p $(@D)
 mkdir -p $(@D)/images
 cp $(css) $(@D)
-cp images/* $(@D)/images/
+if [ -d  images ]; then cp images/* $(@D)/images/; fi
 $(xsltproc) --stringparam target.database.document sitemap.xhtml.xml \
   --nonet --xinclude --output $(@D)/ $(xsl)/xhtml.xsl $<
 endef
@@ -50,7 +50,7 @@ endef
 
 # Generate PDF from XSL-FO.
 define generate_pdf
-$(fop) $< $@
+$(fop) -d -v -r $< $@
 endef
 
 ########################################################################
