@@ -254,5 +254,11 @@
   <xsl:apply-templates mode="preface.titlepage.recto.auto.mode" select="d:info/d:abstract"/>
 </xsl:template>
 
+<xsl:template match="d:preface/d:para[@role='remark']">
+  <fo:inline font-style="italic" color="red">
+    <xsl:call-template name="inline.charseq"/>
+  </fo:inline>
+</xsl:template>
+
 </xsl:stylesheet>
 

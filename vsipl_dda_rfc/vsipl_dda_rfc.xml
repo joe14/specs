@@ -1,18 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<book version="5.0 OMG" xml:id="vsipl_dda_rfc" 
+<book version="5.0 OMG" xml:id="vsipl_dda_rfc"
       xmlns="http://docbook.org/ns/docbook"
       xmlns:xi="http://www.w3.org/2001/XInclude">
   <info>
-    <title>VSIPL DDA RFC</title>
-    <subtitle>Version 0.1</subtitle>
-    <titleabbrev>VSIPL DDA RFC 0.1</titleabbrev>
+    <title>VSIPL DDA RFC [DRAFT]</title>
+    <subtitle>Version 0.1 [DRAFT]</subtitle>
+    <titleabbrev>VSIPL DDA RFC 0.1 [DRAFT]</titleabbrev>
     <pubdate><?dbtimestamp format="Y-m-d"?></pubdate>
   </info>
-
+  
   <preface role="not.in.toc" xml:id="title1">
     <!-- FIXME: DB requires a title but the OMG spec doesn't allow one. -->
 
     <title/>
+    
+    <para><remark>This document contains proposed additions to version 1.4 of
+    the VSIPL specification, namely the addition of a direct data access (DDA)
+    paradigm.</remark><emphasis role="bold"><remark> -- jpd3</remark></emphasis></para>
 
     <para><emphasis role="bold">OMG Document Number:</emphasis>
     mars/13-08-02</para>
