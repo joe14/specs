@@ -8,16 +8,16 @@
 # Variables
 ########################################################################
 
-vsipl_dda_rfc_src:= vsipl_dda_rfc.xml dda.xml
+vsipl_dda_src:= vsipl_dda.xml dda.xml
 
-src:=$(vsipl_dda_rfc_src)
+src:=$(vsipl_dda_src)
 
 css:= ../css/style.css
 xsl:= ../xsl
 
-docs:= vsipl_dda_rfc
-xhtml_xref:= vsipl_dda_rfc.xhtml.xref
-fo_xref:= vsipl_dda_rfc.fo.xref
+docs:= vsipl_dda
+xhtml_xref:= vsipl_dda.xhtml.xref
+fo_xref:= vsipl_dda.fo.xref
 xhtml:= $(docs)
 fo:= $(patsubst %, %.fo, $(docs))
 pdf:= $(patsubst %, %.pdf, $(docs))
@@ -35,10 +35,10 @@ pdf: $(pdf)
 # Dependencies
 ########################################################################
 
-vsipl_dda_rfc.xhtml.xref: $(vsipl_dda_rfc_src)
-vsipl_dda_rfc.fo.xref: $(vsipl_dda_rfc_src)
+vsipl_dda.xhtml.xref: $(vsipl_dda_src)
+vsipl_dda.fo.xref: $(vsipl_dda_src)
 
 $(xhtml): $(xhtml_xref)
 $(fo): $(fo_xref)
 
-vsipl_dda_rfc: vsipl_dda_rfc/index.xhtml
+vsipl_dda: vsipl_dda/index.xhtml
