@@ -106,8 +106,10 @@ typedef struct vsip_dda_cproxyobject_i <emphasis role="bold">vsip_dda_cproxy_i</
     <section>
       <title>Proxy Object Attributes</title>
 
-      <para>T<emphasis role="bold">ODO: </emphasis>Define the proxy object
-      attributes structures.</para>
+      <para><emphasis role="bold"><remark>TODO:
+      </remark></emphasis><remark>Define the proxy object
+      attributes</remark><emphasis role="bold"><remark> --
+      jpd3</remark></emphasis></para>
     </section>
 
     <section>
@@ -123,27 +125,11 @@ typedef struct vsip_dda_cproxyobject_i <emphasis role="bold">vsip_dda_cproxy_i</
       implementation can be configured to provide access to blocks via a DDA
       buffer, reguardless of whether it would have otherwise.</para>
 
-      <para><remark>How can we enforce a read-only synchronization policy when
-      direct access to the block memory is provided? -- We could use a const
-      pointer, but that would require that we provide a</remark>
-      <function><remark>vsip_dda_</remark><replaceable>
-          <remark>d</remark>
-        </replaceable><emphasis role="bold">
-          <remark>ro</remark>
-        </emphasis><remark>_ptr_</remark><replaceable>
-          <remark>p</remark>
-        </replaceable><remark>()</remark></function> <remark>function as well
-      and return NULL when the</remark>
-      <function><remark>vsip_dda_</remark><replaceable><remark>d</remark></replaceable><remark>ptr_</remark><replaceable><remark>p</remark></replaceable><remark>()</remark></function>
-      <remark>function is used with any of the write synchronization
-      policies.</remark> <emphasis role="bold"><remark> --
-      jpd3</remark></emphasis></para>
-
       <synopsis>typedef unsigned int <emphasis role="bold">vsip_dda_sync_policy</emphasis>;
 
 vsip_dda_sync_policy <emphasis role="bold">VSIP_DDA_SYNC_POLICY_IN</emphasis> = 0x01;
 vsip_dda_sync_policy <emphasis role="bold">VSIP_DDA_SYNC_POLICY_OUT</emphasis> = 0x02;
-vsip_dda_sync_policy <emphasis role="bold">VSIP_DDA_SYNC_POLICY_INOUT</emphasis> = VSIP_DDA_SYNC_POLICY_IN | VSIP_DDA_SYNC_POLICY_OUT;
+vsip_dda_sync_policy <emphasis role="bold">VSIP_DDA_SYNC_POLICY_INOUT</emphasis> = 0x03;
 vsip_dda_sync_policy <emphasis role="bold">VSIP_DDA_SYNC_POLICY_COPY</emphasis> = 0x04;</synopsis>
 
       <para>Policy flags may be OR'ed together. A policy with neither the
@@ -494,7 +480,7 @@ void <emphasis role="bold">vsip_dda_proxygetattrib_ti</emphasis>(vsip_dda_proxy_
           <term>Examples</term>
 
           <listitem>
-            <programlisting><xi:include href="examples/dda_dptr_p.c"
+            <programlisting><xi:include href="examples/dda_dproxygetattrib_p.c"
                 parse="text"/></programlisting>
           </listitem>
         </varlistentry>
