@@ -1,9 +1,7 @@
 Introduction
 ------------
 
-This repository contains the sources for the drafts of the
-[VSIPL](http://www.omg.org/spec/VSIPL/) / [VSIPL++](http://www.omg.org/spec/VSIPL++/)
-specifications.
+This repository contains the sources for the [VSIPL](http://www.omg.org/spec/VSIPL/) and [VSIPL++](http://www.omg.org/spec/VSIPL++/) specifications.
 
 The specifications are written using [DocBook](http://www.docbook.org). XSLT stylesheets are used to transform the "source code" into HTML and PDF output.
 
