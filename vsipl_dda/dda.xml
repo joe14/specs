@@ -58,35 +58,32 @@
     <title>Type Definitions</title>
 
     <section>
-      <title>Layout Object</title>
+      <title>Layout Attributes</title>
 
       <para>As described above, the implementation may lay out data in a DDA
       buffer differently than the block memory, and it may create a VSIPL
       space DDA buffer in cases where it would not have otherwise in order to
-      provide for a layout that is more well-suited for DDA. Moreover, the DDA
-      buffer layout may be specified with a layout object.</para>
+      provide for a layout that is more well-suited for DDA. Moreover, how the
+      implementation lays out the data in a DDA buffer may be specified with
+      layout attributes.</para>
 
-      <para>The DDA layout object associated with blocks of floating-point
+      <para>The DDA layout attributes associated with blocks of floating-point
       data is defined as follows.</para>
 
       <synopsis>typedef struct 
 {
   <remark>// TODO: Define fields.</remark>
-} vsip_dda_datalayoutobject_<replaceable>f</replaceable>;
-typedef struct vsip_dda_datalayoutobject_<replaceable>f</replaceable> <emphasis
-          role="bold">vsip_dda_datalayout_<replaceable>f</replaceable></emphasis>;</synopsis>
+} <emphasis role="bold">vsip_dda_datalayout_<replaceable>f</replaceable></emphasis>;</synopsis>
 
-      <para>The DDA layout object associated with blocks of complex
+      <para>The DDA layout attributes associated with blocks of complex
       floating-point data is defined as follows.</para>
 
       <synopsis>typdef struct
 {
   <remark>// TODO: Define fields.</remark>
-} vsip_dda_cdatalayoutobject_<replaceable>f</replaceable>;
-typedef struct vsip_dda_cdatalayoutobject_<replaceable>f</replaceable> <emphasis
-          role="bold">vsip_dda_cdatalayout_<replaceable>f</replaceable></emphasis>;</synopsis>
+} <emphasis role="bold">vsip_dda_cdatalayout_<replaceable>f</replaceable></emphasis>;</synopsis>
 
-      <para><remark>TODO: Define additional layout objects.</remark></para>
+      <para><remark>TODO: Define additional layout attributes.</remark></para>
     </section>
 
     <section>
@@ -310,10 +307,10 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
                 <term>layout</term>
 
                 <listitem>
-                  <para>This argument provides the layout to use when
-                  computing the cost of DDA. A null layout indicates that the
-                  function should use the block's layout in computing the
-                  cost.</para>
+                  <para>This argument provides the layout attributes to use
+                  when computing the cost of DDA. Null layout attributes
+                  indicate that the function should use the block's layout in
+                  computing the cost.</para>
                 </listitem>
               </varlistentry>
 
@@ -442,9 +439,10 @@ vsip_dda_cdata_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_cdat
                 <term>layout</term>
 
                 <listitem>
-                  <para>This argument provides the layout to use for the proxy
-                  object. A null layout indicates that the function should use
-                  the block's layout to create the proxy object.</para>
+                  <para>This argument provides the layout attributes to use
+                  for the proxy object. Null layout attributes indicate that
+                  the function should use the block's layout to create the
+                  proxy object.</para>
                 </listitem>
               </varlistentry>
 
