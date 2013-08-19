@@ -14,6 +14,7 @@
 	    border-bottom="3pt solid black"
 	    padding-before="10mm"
 	    padding-after="10mm">
+    <xsl:apply-templates select="d:remark"/>
     <xsl:apply-templates select="d:para"/>
   </fo:block>
 </xsl:template>
@@ -252,12 +253,6 @@
   <xsl:apply-templates mode="preface.titlepage.recto.auto.mode" select="d:prefaceinfo/d:abstract"/>
   <xsl:apply-templates mode="preface.titlepage.recto.auto.mode" select="d:docinfo/d:abstract"/>
   <xsl:apply-templates mode="preface.titlepage.recto.auto.mode" select="d:info/d:abstract"/>
-</xsl:template>
-
-<xsl:template match="d:preface/d:para[@role='remark']">
-  <fo:inline font-style="italic" color="red">
-    <xsl:call-template name="inline.charseq"/>
-  </fo:inline>
 </xsl:template>
 
 </xsl:stylesheet>

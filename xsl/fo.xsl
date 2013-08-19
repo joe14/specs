@@ -16,6 +16,7 @@
 <xsl:param name="target.database.document"></xsl:param>
 <xsl:param name="variablelist.as.blocks" select="1"></xsl:param> 
 <xsl:param name="section.autolabel" select="1"></xsl:param>
+<xsl:param name="show.comments"/>
 
 <xsl:attribute-set name="book.titlepage.verso.style" 
 		   use-attribute-sets="component.titlepage.properties"/>
@@ -560,9 +561,11 @@ symbol is used as the hyphenation character:
 </xsl:template>
 
 <xsl:template match="d:remark">
-  <fo:inline font-style="italic" color="red">
-    <xsl:call-template name="inline.charseq"/>
-  </fo:inline>
+  <xsl:if test="$show.comments != 0">
+    <fo:block font-style="italic" color="red">
+      <xsl:call-template name="inline.charseq"/>      
+    </fo:block>
+  </xsl:if>
 </xsl:template>
 
 </xsl:stylesheet>

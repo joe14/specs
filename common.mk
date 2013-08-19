@@ -11,9 +11,16 @@ fop := fop
 # Build instructions
 ########################################################################
 
+ifeq ($(DRAFT),y)
+XSLTPROC_FLAGS += --param show.comments 1
+else
+XSLTPROC_FLAGS += --param show.comments 0
+endif
+
 # Generate XHTML target db
 define generate_xhtml_xref
-$(xsltproc) --stringparam target.database.document sitemap.xhtml.xml \
+$(xsltproc) ${XSLTPROC_FLAGS} \
+  --stringparam target.database.document sitemap.xhtml.xml \
   --nonet --xinclude --xincludestyle \
   --stringparam  collect.xref.targets  only  \
   --stringparam targets.filename $@ \
@@ -22,7 +29,8 @@ endef
 
 # Generate FO target db
 define generate_fo_xref
-$(xsltproc) --stringparam target.database.document sitemap.fo.xml \
+$(xsltproc) ${XSLTPROC_FLAGS} \
+  --stringparam target.database.document sitemap.fo.xml \
   --nonet --xinclude --xincludestyle \
   --stringparam  collect.xref.targets only \
   --stringparam targets.filename $@ \
@@ -35,14 +43,16 @@ mkdir -p $(@D)
 mkdir -p $(@D)/images
 cp $(css) $(@D)
 if [ -d  images ]; then cp images/* $(@D)/images/; fi
-$(xsltproc) --stringparam target.database.document sitemap.xhtml.xml \
+$(xsltproc) ${XSLTPROC_FLAGS} \
+  --stringparam target.database.document sitemap.xhtml.xml \
   --nonet --xinclude --output $(@D)/ $(xsl)/xhtml.xsl $<
 endef
 
 # Generate XSL-FO from DocBook.
 define generate_fo
 mkdir -p $(@D)
-$(xsltproc) --stringparam target.database.document sitemap.fo.xml \
+$(xsltproc) ${XSLTPROC_FLAGS} \
+  --stringparam target.database.document sitemap.fo.xml \
   --stringparam use.extensions 1 \
   --stringparam logo.path $(xsl) \
   --nonet --xinclude --output $@ $(xsl)/fo.xsl $<
@@ -50,7 +60,7 @@ endef
 
 # Generate PDF from XSL-FO.
 define generate_pdf
-$(fop) -d -v -r $< $@
+$(fop) $< $@
 endef
 
 ########################################################################
