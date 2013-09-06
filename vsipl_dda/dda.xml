@@ -50,8 +50,18 @@
     a DDA buffer may be specified as described in more detail below.</para>
 
     <para>If a DDA buffer is used, data must be synchronized between the block
-    memory and the DDA buffer. The data synchronization paradigm is described
-    in more detail below.</para>
+    memory and the DDA buffer; the data synchronization paradigm is described
+    in more detail below. It is important to note that synchronization will
+    incur additional overhead: the
+    <function>vsip_dda_<replaceable>d</replaceable>required_buffer_size_<replaceable>p</replaceable>()</function>
+    and
+    <function>vsip_dda_<replaceable>d</replaceable>cost_<replaceable>p</replaceable>()</function>
+    functions help to quantify this overhead. That being said, there may be
+    situations in which using a DDA buffer results in less overhead, in
+    aggregate, than accessing the block memory directly. For example, direct
+    access via a DDA buffer in host memory may incur less overhead, in
+    aggregate, than direct access to block memory in accelerator or
+    co-processor memory.</para>
   </section>
 
   <section>
@@ -73,7 +83,7 @@
       <synopsis>typedef struct 
 {
   <remark>// TODO: Define fields.</remark>
-} <emphasis role="bold">vsip_dda_datalayout_<replaceable>f</replaceable></emphasis>;</synopsis>
+} <emphasis role="bold">vsip_dda_datalayout_f</emphasis>;</synopsis>
 
       <para><remark>TODO: Define additional layout attributes.</remark></para>
     </section>
@@ -90,6 +100,11 @@
       (write-only), or input and output (read-write). In addition, the
       implementation can be configured to provide access to blocks via a DDA
       buffer, regardless of whether it would have otherwise.</para>
+
+      <para>Synchronization policies are named from the perspective of an
+      external operation using the respective DDA pointer. For example, an
+      input, or read-only, synchronization policy indicates that an external
+      operation should only use the DDA pointer as input.</para>
 
       <synopsis>typedef unsigned int <emphasis role="bold">vsip_dda_sync_policy</emphasis>;
 
@@ -159,15 +174,14 @@ typedef struct vsip_dda_cdataobject_<replaceable>f</replaceable> <emphasis
     <section>
       <title>Proxy Object Attributes</title>
 
-      <para>The DDA proxy object attributes associated with blocks of
-      floating-point data are defined as follows.</para>
+      <para>The DDA proxy object attributes associated with blocks of vectors
+      of floating-point data are defined as follows.</para>
 
       <synopsis>typedef struct
 {
-  vsip_block_<replaceable>f</replaceable> *block;
-  vsip_dda_datalayout_<replaceable>f</replaceable> *layout;
+  vsip_vattr_<replaceable>f</replaceable> *attrib;
+  vsip_dda_datalayout_f *layout;
   vsip_dda_sync_policy sync_policy;
-  <remark>// TODO: Are other fields required?</remark>
 } <emphasis role="bold">vsip_dda_dataobjectattr_<replaceable>f</replaceable></emphasis>;</synopsis>
 
       <para>The DDA proxy object attributes associated with blocks of complex
@@ -175,10 +189,9 @@ typedef struct vsip_dda_cdataobject_<replaceable>f</replaceable> <emphasis
 
       <synopsis>typedef struct
 {
-  vsip_cblock_<replaceable>f</replaceable> *block;
-  vsip_dda_cdatalayout_<replaceable>f</replaceable> *layout;
+  vsip_cvattr_<replaceable>f</replaceable> *attrib;
+  vsip_dda_cdatalayout_f *layout;
   vsip_dda_sync_policy sync_policy;
-  <remark>// TODO: Are other fields required?</remark>
 } <emphasis role="bold">vsip_dda_cdataobjectattr_<replaceable>f</replaceable></emphasis>;</synopsis>
 
       <para><remark>TODO: Define additional attribute types.</remark></para>
@@ -276,11 +289,11 @@ typedef struct vsip_dda_cdataobject_<replaceable>f</replaceable> <emphasis
 
           <listitem>
             <synopsis>int <emphasis role="bold">vsip_dda_cost_<replaceable>f</replaceable></emphasis>(vsip_block_<replaceable>f</replaceable> *block,
-                    vsip_dda_datalayout_<replaceable>f</replaceable> *layout,
+                    vsip_dda_datalayout_f *layout,
                     vsip_dda_sync_policy sync_policy);
 
 int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>(vsip_cblock_<replaceable>f</replaceable> *block,
-                     vsip_dda_cdatalayout_<replaceable>f</replaceable> *layout,
+                     vsip_dda_cdatalayout_f *layout,
                      vsip_dda_sync_policy sync_policy);
 
 <remark>// TODO: Define additional prototypes.</remark></synopsis>
@@ -405,8 +418,8 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
 
           <listitem>
             <synopsis>int <emphasis role="bold">vsip_dda_cptr_<replaceable>f</replaceable></emphasis>(vsip_dda_cdata_<replaceable>f</replaceable> *data,
-                    vsip_scalar_f **ptr1,
-                    vsip_scalar_f **ptr2);
+                    vsip_scalar_<replaceable>f</replaceable> **ptr1,
+                    vsip_scalar_<replaceable>f</replaceable> **ptr2);
 
 <remark>// TODO: Define additional prototypes.</remark></synopsis>
           </listitem>
@@ -524,12 +537,12 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
           <listitem>
             <synopsis>vsip_dda_data_<replaceable>f</replaceable> *<emphasis
                 role="bold">vsip_dda_datacreate_<replaceable>f</replaceable></emphasis>(vsip_block_<replaceable>f</replaceable> *block,
-                                       vsip_dda_datalayout_<replaceable>f</replaceable> *layout,
+                                       vsip_dda_datalayout_f *layout,
                                        vsip_dda_sync_policy sync_policy,
                                        vsip_scalar_<replaceable>f</replaceable> *buffer);
 
 vsip_dda_cdata_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_cdatacreate_<replaceable>f</replaceable></emphasis>(vsip_cblock_<replaceable>f</replaceable> *block,
-                                         vsip_dda_cdatalayout_<replaceable>f</replaceable> *layout,
+                                         vsip_dda_cdatalayout_f *layout,
                                          vsip_dda_sync_policy sync_policy,
                                          vsip_scalar_<replaceable>f</replaceable> *buffer);
 
@@ -981,11 +994,11 @@ void <emphasis role="bold">vsip_dda_cdatagetattrib_<replaceable>f</replaceable><
           <listitem>
             <synopsis>
 vsip_length <emphasis role="bold">vsip_dda_required_buffer_size_<replaceable>f</replaceable></emphasis>(vsip_block_<replaceable>f</replaceable> *block,
-                                            vsip_dda_datalayout_<replaceable>f</replaceable> *layout,
+                                            vsip_dda_datalayout_f *layout,
                                             vsip_dda_sync_policy sync_policy);
 
 vsip_length <emphasis role="bold">vsip_dda_crequired_buffer_size_<replaceable>f</replaceable></emphasis>(vsip_cblock_<replaceable>f</replaceable> *block,
-                                             vsip_dda_cdatalayout_<replaceable>f</replaceable> *layout,
+                                             vsip_dda_cdatalayout_f *layout,
                                              vsip_dda_sync_policy sync_policy);
 
 <remark>// TODO: Define additional prototypes.</remark></synopsis>
