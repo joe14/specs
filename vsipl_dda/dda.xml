@@ -68,6 +68,28 @@
     <title>Type Definitions</title>
 
     <section>
+      <title>Packing</title>
+
+      <para/>
+
+      <synopsis>typedef enum
+{
+  VSIP_DDA_PACK_TYPE_ANY;
+  VSIP_DDA_PACK_TYPE_UNIT_STRIDE;
+  VSIP_DDA_PACK_TYPE_DENSE;
+  VSIP_DDA_PACK_TYPE_ALIGNED;
+  VSIP_DDA_PACK_TYPE_ALIGNED_8;
+  VSIP_DDA_PACK_TYPE_ALIGNED_16;
+  VSIP_DDA_PACK_TYPE_ALIGNED_32;
+  VSIP_DDA_PACK_TYPE_ALIGNED_64;
+  VSIP_DDA_PACK_TYPE_ALIGNED_128;
+  VSIP_DDA_PACK_TYPE_ALIGNED_256;
+  VSIP_DDA_PACK_TYPE_ALIGNED_512;
+  VSIP_DDA_PACK_TYPE_ALIGNED_1024;
+} <emphasis role="bold">vsip_dda_pack_type</emphasis>;</synopsis>
+    </section>
+
+    <section>
       <title>Layout Attributes</title>
 
       <para>As described above, the implementation may lay out data in a DDA
@@ -82,10 +104,11 @@
 
       <synopsis>typedef struct 
 {
-  <remark>// TODO: Define fields.</remark>
+  vsip_length dim;
+  vsip_cmplx_mem storage_format;
+  vsip_dda_pack_type packing;
+  vsip_major order;
 } <emphasis role="bold">vsip_dda_datalayout_f</emphasis>;</synopsis>
-
-      <para><remark>TODO: Define additional layout attributes.</remark></para>
     </section>
 
     <section>
@@ -110,7 +133,8 @@
 
 vsip_dda_sync_policy <emphasis role="bold">VSIP_DDA_SYNC_POLICY_IN</emphasis> = 0x01;
 vsip_dda_sync_policy <emphasis role="bold">VSIP_DDA_SYNC_POLICY_OUT</emphasis> = 0x02;
-vsip_dda_sync_policy <emphasis role="bold">VSIP_DDA_SYNC_POLICY_INOUT</emphasis> = 0x03;
+vsip_dda_sync_policy <emphasis role="bold">VSIP_DDA_SYNC_POLICY_INOUT</emphasis>
+  = VSIP_DDA_SYNC_POLICY_IN | VSIPL_DDA_SYNC_POLICY_OUT;
 vsip_dda_sync_policy <emphasis role="bold">VSIP_DDA_SYNC_POLICY_COPY</emphasis> = 0x04;</synopsis>
 
       <para>Policy flags may be OR'ed together. A policy with neither the

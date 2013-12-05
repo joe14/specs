@@ -1,22 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <book version="5.0 OMG" xml:id="vsipl_dda"
       xmlns="http://docbook.org/ns/docbook"
-      xmlns:xi="http://www.w3.org/2001/XInclude">
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:ns="http://docbook.org/ns/docbook">
   <info>
     <title>VSIPL DDA Additions [DRAFT]</title>
-    <subtitle>Version 0.5</subtitle>
-    <titleabbrev>VSIPL DDA Additions 0.5 [DRAFT]</titleabbrev>
-    <pubdate><?dbtimestamp format="Y-m-d"?></pubdate>
+
+    <subtitle>Version 0.6</subtitle>
+
+    <titleabbrev>VSIPL DDA Additions 0.6 [DRAFT]</titleabbrev>
+
+    <pubdate>
+      <?dbtimestamp format="Y-m-d"?>
+    </pubdate>
   </info>
-  
+
   <preface role="not.in.toc" xml:id="title1">
     <!-- FIXME: DB requires a title but the OMG spec doesn't allow one. -->
 
     <title/>
-    
-    <para><remark>This document contains proposed additions to version 1.4 of
-    the VSIPL specification, namely the addition of a direct data access (DDA)
-    paradigm.</remark></para>
+
+    <para>
+      <remark>This document contains proposed additions to version 1.4 of the
+      VSIPL specification, namely the addition of a direct data access (DDA)
+      paradigm.</remark>
+    </para>
 
     <para><emphasis role="bold">OMG Document Number:</emphasis>
     mars/13-08-02</para>
@@ -25,6 +33,32 @@
     http://www.omg.org/spec/VSIPL</para>
   </preface>
 
+  <chapter>
+	  <title>Revision History</title>
+    <chapterinfo>
+      <revhistory>
+        <revision>
+          <revnumber>0.5</revnumber>
+
+          <date>6 Sept 2013</date>
+
+          <revremark>Initial public release</revremark>
+        </revision>
+
+        <revision>
+          <revnumber>0.6</revnumber>
+
+          <date>5 Dec 2013</date>
+
+          <revremark>Added fields to the vsip_dda_layout structure; changed
+          the definition of VSIP_DDA_SYNC_POLICY_INOUT to leverage the IN and
+          OUT policies.</revremark>
+        </revision>
+      </revhistory>
+    </chapterinfo>
+  </chapter>
+
   <toc/>
-  <xi:include href="dda.xml" />
+
+  <xi:include href="dda.xml"/>
 </book>

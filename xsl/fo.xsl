@@ -182,6 +182,9 @@ symbol is used as the hyphenation character:
   <xsl:attribute name="border">0.5pt solid black</xsl:attribute>
   <xsl:attribute name="font-size">9pt</xsl:attribute>
   <xsl:attribute name="padding">4pt</xsl:attribute>
+  <xsl:attribute name="font-family">
+    <xsl:value-of select="$body.font.family"/>
+  </xsl:attribute>
 </xsl:attribute-set>
 
 <xsl:template match="d:revision/d:date">
