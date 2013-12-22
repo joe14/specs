@@ -6,9 +6,9 @@
   <info>
     <title>VSIPL DDA Additions [DRAFT]</title>
 
-    <subtitle>Version 0.6</subtitle>
+    <subtitle>Version 0.7</subtitle>
 
-    <titleabbrev>VSIPL DDA Additions 0.6 [DRAFT]</titleabbrev>
+    <titleabbrev>VSIPL DDA Additions 0.7 [DRAFT]</titleabbrev>
 
     <pubdate>
       <?dbtimestamp format="Y-m-d"?>
@@ -53,6 +53,16 @@
           <revremark>Added fields to the vsip_dda_layout structure; changed
           the definition of VSIP_DDA_SYNC_POLICY_INOUT to leverage the IN and
           OUT policies.</revremark>
+        </revision>
+        
+        <revision>
+          <revnumber>0.7</revnumber>
+
+          <date>22 Dec 2013</date>
+
+          <revremark>Added storage format and dimension order types; updated
+          the layout attributes to use the new types; change the layout
+          attributes to a type-agnostic type</revremark>
         </revision>
       </revhistory>
     </chapterinfo>

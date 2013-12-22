@@ -68,9 +68,24 @@
     <title>Type Definitions</title>
 
     <section>
-      <title>Packing</title>
+      <title>Storage Format</title>
 
       <para/>
+
+      <synopsis>typdef enum
+{
+  VSIP_STORAGE_FORMAT_ANY;
+  VSIP_STORAGE_FORMAT_ARRAY;
+  VSIP_STORAGE_FORMAT_COMPLEX;
+  VSIP_STORAGE_FORMAT_INTERLEAVED_COMPLEX;
+} <emphasis role="bold">vsip_storage_format</emphasis>;</synopsis>
+    </section>
+
+    <section>
+      <title>Packing</title>
+
+      <para>The packing type is used to specify how data is arranged within
+      the block.</para>
 
       <synopsis>typedef enum
 {
@@ -90,6 +105,27 @@
     </section>
 
     <section>
+      <title>Dimension Order (Tuple)</title>
+
+      <para>The dimension order, or <emphasis>tuple</emphasis>, type is used
+      to specify the order in which logical dimensions are used to address
+      memory. Logical dimensions are numbered from major to minor, starting
+      with zero. Dimensions not relevant to the data object are
+      ignored.</para>
+
+      <synopsis>typedef vsip_scalar_vi vsip_dimension;
+
+typedef struct
+{
+  vsip_dimension impl_dim0;
+  vsip_dimension impl_dim1;
+  vsip_dimension impl_dim2;
+} <emphasis role="bold">vsip_tuple</emphasis>;
+
+typedef vsip_tuple <emphasis role="bold">vsip_dimension_order</emphasis>;</synopsis>
+    </section>
+
+    <section>
       <title>Layout Attributes</title>
 
       <para>As described above, the implementation may lay out data in a DDA
@@ -99,16 +135,15 @@
       implementation lays out the data in a DDA buffer may be specified with
       layout attributes.</para>
 
-      <para>The DDA layout attributes associated with blocks of both real and
-      complex floating-point data is defined as follows.</para>
+      <para>The DDA layout attributes are defined as follows.</para>
 
       <synopsis>typedef struct 
 {
   vsip_length dim;
-  vsip_cmplx_mem storage_format;
+  vsip_storage_format storage_format;
   vsip_dda_pack_type packing;
-  vsip_major order;
-} <emphasis role="bold">vsip_dda_datalayout_f</emphasis>;</synopsis>
+  vsip_dimension_order order;
+} <emphasis role="bold">vsip_dda_datalayout</emphasis>;</synopsis>
     </section>
 
     <section>
