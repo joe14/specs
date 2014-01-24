@@ -6,9 +6,9 @@
   <info>
     <title>VSIPL DDA Additions [DRAFT]</title>
 
-    <subtitle>Version 0.7</subtitle>
+    <subtitle>Version 0.8</subtitle>
 
-    <titleabbrev>VSIPL DDA Additions 0.7 [DRAFT]</titleabbrev>
+    <titleabbrev>VSIPL DDA Additions 0.8 [DRAFT]</titleabbrev>
 
     <pubdate>
       <?dbtimestamp format="Y-m-d"?>
@@ -21,9 +21,9 @@
     <title/>
 
     <para>
-      <remark>This document contains proposed additions to version 1.4 of the
-      VSIPL specification, namely the addition of a direct data access (DDA)
-      paradigm.</remark>
+      <remark>This document contains proposed additions/ modifictaions to
+      version 1.4 of the VSIPL specification, namely the addition of a direct
+      data access (DDA) API.</remark>
     </para>
 
     <para><emphasis role="bold">OMG Document Number:</emphasis>
@@ -33,42 +33,56 @@
     http://www.omg.org/spec/VSIPL</para>
   </preface>
 
-  <chapter>
-	  <title>Revision History</title>
-    <chapterinfo>
-      <revhistory>
-        <revision>
-          <revnumber>0.5</revnumber>
-
-          <date>6 Sept 2013</date>
-
-          <revremark>Initial public release</revremark>
-        </revision>
-
-        <revision>
-          <revnumber>0.6</revnumber>
-
-          <date>5 Dec 2013</date>
-
-          <revremark>Added fields to the vsip_dda_layout structure; changed
-          the definition of VSIP_DDA_SYNC_POLICY_INOUT to leverage the IN and
-          OUT policies.</revremark>
-        </revision>
-        
-        <revision>
-          <revnumber>0.7</revnumber>
-
-          <date>22 Dec 2013</date>
-
-          <revremark>Added storage format and dimension order types; updated
-          the layout attributes to use the new types; change the layout
-          attributes to a type-agnostic type</revremark>
-        </revision>
-      </revhistory>
-    </chapterinfo>
-  </chapter>
-
   <toc/>
 
-  <xi:include href="dda.xml"/>
+  <preface role="not.in.toc">
+    <title>Revision History</title>
+
+    <revhistory>
+      <revision>
+        <revnumber>0.5</revnumber>
+
+        <date>6 Sept 2013</date>
+
+        <revremark>Initial public release</revremark>
+      </revision>
+
+      <revision>
+        <revnumber>0.6</revnumber>
+
+        <date>5 Dec 2013</date>
+
+        <revremark>Added fields to the vsip_dda_layout structure; changed the
+        definition of VSIP_DDA_SYNC_POLICY_INOUT to leverage the IN and OUT
+        policies.</revremark>
+      </revision>
+
+      <revision>
+        <revnumber>0.7</revnumber>
+
+        <date>22 Dec 2013</date>
+
+        <revremark>Added storage format and dimension order types; updated the
+        layout attributes to use the new types; change the layout attributes
+        to a type-agnostic type</revremark>
+      </revision>
+
+      <revision>
+        <revnumber>0.8</revnumber>
+
+        <date>23 Jan 2014</date>
+
+        <revremark>Copied the structure of chapter 2 to the draft; Split block
+        layout types out into a separate section; Added an abstract pointer
+        object for complex DDA pointers, with raw pointer accessor functions,
+        and modified the complex pointer accessor accordingly; added more text
+        to describe the storage format type; Made synchronization policy
+        declarations constant; Added dimension type declarations; Packing and
+        layout types no longer have DDA-specific names; shortened dimension
+        type names</revremark>
+      </revision>
+    </revhistory>
+  </preface>
+
+  <xi:include href="types.xml"/>
 </book>

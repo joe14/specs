@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter version="5.0" xml:id="dda" xmlns="http://docbook.org/ns/docbook"
+<section version="5.0" xml:id="dda" xmlns="http://docbook.org/ns/docbook"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns6="http://www.w3.org/1999/xlink"
          xmlns:ns5="http://www.w3.org/2000/svg"
@@ -8,7 +8,7 @@
          xmlns:m="http://www.w3.org/1998/Math/MathML">
   <title>Direct Data Access Functions</title>
 
-  <titleabbrev>Direct Data Access</titleabbrev>
+  <para><remark>The following will be added as section 2.6.</remark></para>
 
   <section>
     <title>Introduction</title>
@@ -28,8 +28,8 @@
 
     <para>The implementation may provide direct access to the block's own
     storage, or a temporary copy may be created. In either case, the memory to
-    which the DDA pointers refer is in the VSIPL space. There is a third case:
-    user space memory is provided and the DDA pointers refer to that user
+    which the DDA pointer refers is in the VSIPL space. There is a third case:
+    user space memory is provided and the DDA pointer refers to that user
     space memory instead.</para>
 
     <para>In the descriptions that follow, the block's own storage will be
@@ -39,13 +39,13 @@
     space DDA buffer</emphasis>. User space memory provided to store a
     temporary copy of the block's data for direct access will be referred to
     as a <emphasis>user space DDA buffer</emphasis>. The term <emphasis>DDA
-    buffer</emphasis> will be used when the memory may be in either the VSIPL
-    space or user space.</para>
+    buffer</emphasis> will be used when the buffer memory may be in either the
+    VSIPL space or user space.</para>
 
     <para>In the event that the layout of the data in block memory is not
     well-suited for DDA, the implementation may lay out the data in a DDA
-    buffer differently than in the block memory. In cases where a DDA buffer
-    would not otherwise be used, a VSIPL space DDA buffer will be created to
+    buffer differently than in the block memory. In such cases, if no user
+    space DDA buffer is provided, a VSIPL space DDA buffer will be created to
     accommodate the alternate layout. Additionally, the layout of the data in
     a DDA buffer may be specified as described in more detail below.</para>
 
@@ -68,85 +68,6 @@
     <title>Type Definitions</title>
 
     <section>
-      <title>Storage Format</title>
-
-      <para/>
-
-      <synopsis>typdef enum
-{
-  VSIP_STORAGE_FORMAT_ANY;
-  VSIP_STORAGE_FORMAT_ARRAY;
-  VSIP_STORAGE_FORMAT_COMPLEX;
-  VSIP_STORAGE_FORMAT_INTERLEAVED_COMPLEX;
-} <emphasis role="bold">vsip_storage_format</emphasis>;</synopsis>
-    </section>
-
-    <section>
-      <title>Packing</title>
-
-      <para>The packing type is used to specify how data is arranged within
-      the block.</para>
-
-      <synopsis>typedef enum
-{
-  VSIP_DDA_PACK_TYPE_ANY;
-  VSIP_DDA_PACK_TYPE_UNIT_STRIDE;
-  VSIP_DDA_PACK_TYPE_DENSE;
-  VSIP_DDA_PACK_TYPE_ALIGNED;
-  VSIP_DDA_PACK_TYPE_ALIGNED_8;
-  VSIP_DDA_PACK_TYPE_ALIGNED_16;
-  VSIP_DDA_PACK_TYPE_ALIGNED_32;
-  VSIP_DDA_PACK_TYPE_ALIGNED_64;
-  VSIP_DDA_PACK_TYPE_ALIGNED_128;
-  VSIP_DDA_PACK_TYPE_ALIGNED_256;
-  VSIP_DDA_PACK_TYPE_ALIGNED_512;
-  VSIP_DDA_PACK_TYPE_ALIGNED_1024;
-} <emphasis role="bold">vsip_dda_pack_type</emphasis>;</synopsis>
-    </section>
-
-    <section>
-      <title>Dimension Order (Tuple)</title>
-
-      <para>The dimension order, or <emphasis>tuple</emphasis>, type is used
-      to specify the order in which logical dimensions are used to address
-      memory. Logical dimensions are numbered from major to minor, starting
-      with zero. Dimensions not relevant to the data object are
-      ignored.</para>
-
-      <synopsis>typedef vsip_scalar_vi vsip_dimension;
-
-typedef struct
-{
-  vsip_dimension impl_dim0;
-  vsip_dimension impl_dim1;
-  vsip_dimension impl_dim2;
-} <emphasis role="bold">vsip_tuple</emphasis>;
-
-typedef vsip_tuple <emphasis role="bold">vsip_dimension_order</emphasis>;</synopsis>
-    </section>
-
-    <section>
-      <title>Layout Attributes</title>
-
-      <para>As described above, the implementation may lay out data in a DDA
-      buffer differently than the block memory, and it may create a VSIPL
-      space DDA buffer in cases where it would not have otherwise in order to
-      provide for a layout that is more well-suited for DDA. Moreover, how the
-      implementation lays out the data in a DDA buffer may be specified with
-      layout attributes.</para>
-
-      <para>The DDA layout attributes are defined as follows.</para>
-
-      <synopsis>typedef struct 
-{
-  vsip_length dim;
-  vsip_storage_format storage_format;
-  vsip_dda_pack_type packing;
-  vsip_dimension_order order;
-} <emphasis role="bold">vsip_dda_datalayout</emphasis>;</synopsis>
-    </section>
-
-    <section>
       <title>Synchronization Policy</title>
 
       <para>As indicated above, if DDA provides access to the block via a DDA
@@ -156,7 +77,7 @@ typedef vsip_tuple <emphasis role="bold">vsip_dimension_order</emphasis>;</synop
 
       <para>Blocks may be accessed via DDA as input (read-only), output
       (write-only), or input and output (read-write). In addition, the
-      implementation can be configured to provide access to blocks via a DDA
+      implementation can be instructed to provide access to blocks via a DDA
       buffer, regardless of whether it would have otherwise.</para>
 
       <para>Synchronization policies are named from the perspective of an
@@ -166,11 +87,10 @@ typedef vsip_tuple <emphasis role="bold">vsip_dimension_order</emphasis>;</synop
 
       <synopsis>typedef unsigned int <emphasis role="bold">vsip_dda_sync_policy</emphasis>;
 
-vsip_dda_sync_policy <emphasis role="bold">VSIP_DDA_SYNC_POLICY_IN</emphasis> = 0x01;
-vsip_dda_sync_policy <emphasis role="bold">VSIP_DDA_SYNC_POLICY_OUT</emphasis> = 0x02;
-vsip_dda_sync_policy <emphasis role="bold">VSIP_DDA_SYNC_POLICY_INOUT</emphasis>
-  = VSIP_DDA_SYNC_POLICY_IN | VSIPL_DDA_SYNC_POLICY_OUT;
-vsip_dda_sync_policy <emphasis role="bold">VSIP_DDA_SYNC_POLICY_COPY</emphasis> = 0x04;</synopsis>
+vsip_dda_sync_policy const <emphasis role="bold">VSIP_DDA_SYNC_POLICY_IN</emphasis> = 0x01;
+vsip_dda_sync_policy const <emphasis role="bold">VSIP_DDA_SYNC_POLICY_OUT</emphasis> = 0x02;
+vsip_dda_sync_policy const <emphasis role="bold">VSIP_DDA_SYNC_POLICY_INOUT</emphasis> = 0x03;
+vsip_dda_sync_policy const <emphasis role="bold">VSIP_DDA_SYNC_POLICY_COPY</emphasis> = 0x04;</synopsis>
 
       <para>Policy flags may be OR'ed together. A policy with neither the
       <constant>VSIP_DDA_SYNC_POLICY_IN</constant> nor the
@@ -231,6 +151,32 @@ typedef struct vsip_dda_cdataobject_<replaceable>f</replaceable> <emphasis
     </section>
 
     <section>
+      <title>Pointer Object</title>
+
+      <para>The type of the DDA pointer depends on the storage format of the
+      memory, and may not be known at compile-time. An abstract pointer object
+      provides an extensible method for dealing the multiple pointer types.
+      There is only one storage format for real data, so an abstract pointer
+      object is not necessary to describe DDA pointers to real data.
+      Consequently, this abstract pointer type is only used in conjunction
+      with direct access to complex data.</para>
+
+      <remark>I can't help but wonder if this should be specifically an
+      abstract complex pointer type</remark>
+
+      <para>The abstract pointer type associated with blocks of complex
+      floating-point data is defined as follows.</para>
+
+      <synopsis>struct vsip_dda_ptrobject_<emphasis>f</emphasis>;
+typedef struct vsip_dda_ptrobject_<emphasis>f</emphasis> vsip_dda_pointer_<emphasis>f</emphasis>;</synopsis>
+
+      <remark>We can go the route of an abstract pointer object for complex
+      data, in which case we need separate getters for each pointer type, or
+      we can have separate pointer accessors for each pointer type and forego
+      the abstract pointer type.</remark>
+    </section>
+
+    <section>
       <title>Proxy Object Attributes</title>
 
       <para>The DDA proxy object attributes associated with blocks of vectors
@@ -239,7 +185,7 @@ typedef struct vsip_dda_cdataobject_<replaceable>f</replaceable> <emphasis
       <synopsis>typedef struct
 {
   vsip_vattr_<replaceable>f</replaceable> *attrib;
-  vsip_dda_datalayout_f *layout;
+  vsip_datalayout *layout;
   vsip_dda_sync_policy sync_policy;
 } <emphasis role="bold">vsip_dda_dataobjectattr_<replaceable>f</replaceable></emphasis>;</synopsis>
 
@@ -249,7 +195,7 @@ typedef struct vsip_dda_cdataobject_<replaceable>f</replaceable> <emphasis
       <synopsis>typedef struct
 {
   vsip_cvattr_<replaceable>f</replaceable> *attrib;
-  vsip_dda_cdatalayout_f *layout;
+  vsip_datalayout *layout;
   vsip_dda_sync_policy sync_policy;
 } <emphasis role="bold">vsip_dda_cdataobjectattr_<replaceable>f</replaceable></emphasis>;</synopsis>
 
@@ -280,7 +226,25 @@ typedef struct vsip_dda_cdataobject_<replaceable>f</replaceable> <emphasis
           <row>
             <entry><function>vsip_dda_cptr_<replaceable>p</replaceable></function></entry>
 
-            <entry>Complex Pointer Accessor</entry>
+            <entry>Abstract Complex Pointer Accessor</entry>
+          </row>
+
+          <row>
+            <entry><function>vsip_dda_cptr_as_array_<replaceable>p</replaceable></function></entry>
+
+            <entry>Raw Complex Pointer Accessor</entry>
+          </row>
+
+          <row>
+            <entry><function>vsip_dda_cptr_as_interleaved_<replaceable>p</replaceable></function></entry>
+
+            <entry>Raw Complex Pointer Accessor</entry>
+          </row>
+
+          <row>
+            <entry><function>vsip_dda_cptr_as_split_<replaceable>p</replaceable></function></entry>
+
+            <entry>Raw Complex Pointer Accessor</entry>
           </row>
 
           <row>
@@ -304,7 +268,7 @@ typedef struct vsip_dda_cdataobject_<replaceable>f</replaceable> <emphasis
           <row>
             <entry><function>vsip_dda_ptr_<replaceable>p</replaceable></function></entry>
 
-            <entry>Pointer Accessor</entry>
+            <entry>Raw Real Pointer Accessor</entry>
           </row>
 
           <row>
@@ -348,11 +312,11 @@ typedef struct vsip_dda_cdataobject_<replaceable>f</replaceable> <emphasis
 
           <listitem>
             <synopsis>int <emphasis role="bold">vsip_dda_cost_<replaceable>f</replaceable></emphasis>(vsip_block_<replaceable>f</replaceable> *block,
-                    vsip_dda_datalayout_f *layout,
+                    vsip_datalayout *layout,
                     vsip_dda_sync_policy sync_policy);
 
 int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>(vsip_cblock_<replaceable>f</replaceable> *block,
-                     vsip_dda_cdatalayout_f *layout,
+                     vsip_cdatalayout *layout,
                      vsip_dda_sync_policy sync_policy);
 
 <remark>// TODO: Define additional prototypes.</remark></synopsis>
@@ -461,7 +425,7 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
     <section>
       <title><function>vsip_dda_cptr_<replaceable>p</replaceable></function></title>
 
-      <para>This function gets the complex pointer for DDA.</para>
+      <para>This function gets the abstract complex pointer for DDA.</para>
 
       <variablelist>
         <varlistentry>
@@ -476,9 +440,8 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
           <term>Prototypes</term>
 
           <listitem>
-            <synopsis>int <emphasis role="bold">vsip_dda_cptr_<replaceable>f</replaceable></emphasis>(vsip_dda_cdata_<replaceable>f</replaceable> *data,
-                    vsip_scalar_<replaceable>f</replaceable> **ptr1,
-                    vsip_scalar_<replaceable>f</replaceable> **ptr2);
+            <synopsis>vsip_dda_pointer_<replaceable>f</replaceable> * <emphasis
+                role="bold">vsip_dda_cptr_<replaceable>f</replaceable></emphasis>(vsip_dda_cdata_<replaceable>f</replaceable> *data);
 
 <remark>// TODO: Define additional prototypes.</remark></synopsis>
           </listitem>
@@ -493,30 +456,335 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
                 <term>data</term>
 
                 <listitem>
-                  <para>This argument provides the proxy object whose DDA
+                  <para>This argument provides the proxy object whose abstract
                   pointer will be returned.</para>
                 </listitem>
               </varlistentry>
+            </variablelist>
+          </listitem>
+        </varlistentry>
 
+        <varlistentry>
+          <term>Return Value</term>
+
+          <listitem>
+            <para>This function returns an abstract pointer on success, or
+            null on failure.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Restrictions</term>
+
+          <listitem>
+            <para/>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Errors</term>
+
+          <listitem>
+            <para>This function will have no effect and return null if the
+            proxy object is not valid.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Notes/References</term>
+
+          <listitem>
+            <para/>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Examples</term>
+
+          <listitem>
+            <programlisting><xi:include href="examples/dda_cptr_p.c"
+                parse="text"/></programlisting>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>See Also</term>
+
+          <listitem>
+            <para/>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
+    <section>
+      <title><function>vsip_dda_cptr_as_array_<replaceable>p</replaceable></function></title>
+
+      <para>This function gets the raw complex pointer for DDA.</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Functionality</term>
+
+          <listitem>
+            <para/>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Prototypes</term>
+
+          <listitem>
+            <synopsis>vsip_cscalar_<emphasis><replaceable>f</replaceable></emphasis> * <emphasis
+                role="bold">vsip_dda_cptr_as_array_<replaceable>f</replaceable></emphasis>(vsip_dda_pointer_<replaceable>f</replaceable> *ptr);
+
+<remark>// TODO: Define additional prototypes.</remark></synopsis>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Arguments</term>
+
+          <listitem>
+            <variablelist>
               <varlistentry>
-                <term>ptr1</term>
+                <term>ptr</term>
 
                 <listitem>
-                  <para>This argument contains a pointer to the pointer for
-                  DDA of the interleaved complex data, or a pointer to the
-                  pointer for DDA of the real values, as determined by the
-                  implementation.</para>
+                  <para>This argument provides the abstract pointer object
+                  whose raw pointer will be returned.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Return Value</term>
+
+          <listitem>
+            <para>This function returns the raw pointer for DDA on success, or
+            null on failure.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Restrictions</term>
+
+          <listitem>
+            <para/>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Errors</term>
+
+          <listitem>
+            <para>This function will have no effect and return null if:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>The abstract pointer object is not valid, or</para>
+              </listitem>
+
+              <listitem>
+                <para>The data pointed to by the abstract pointer object is
+                not stored in the
+                <function>VSIP_STORAGE_FORMAT_ARRAY</function> format.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Notes/References</term>
+
+          <listitem>
+            <para/>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Examples</term>
+
+          <listitem>
+            <programlisting><xi:include href="examples/dda_cptr_p.c"
+                parse="text"/></programlisting>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>See Also</term>
+
+          <listitem>
+            <para/>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
+    <section>
+      <title><function>vsip_dda_cptr_as_interleaved_<replaceable>p</replaceable></function></title>
+
+      <para>This function gets the raw complex pointer for DDA.</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Functionality</term>
+
+          <listitem>
+            <para/>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Prototypes</term>
+
+          <listitem>
+            <synopsis>vsip_scalar_<replaceable>f</replaceable> * <emphasis
+                role="bold">vsip_dda_cptr_as_interleaved_<replaceable>f</replaceable></emphasis>(vsip_dda_pointer_<replaceable>f</replaceable> *ptr);
+
+<remark>// TODO: Define additional prototypes.</remark></synopsis>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Arguments</term>
+
+          <listitem>
+            <variablelist>
+              <varlistentry>
+                <term>ptr</term>
+
+                <listitem>
+                  <para>This argument provides the abstract pointer object
+                  whose raw pointer will be returned.</para>
+                </listitem>
+              </varlistentry>
+            </variablelist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Return Value</term>
+
+          <listitem>
+            <para>This function returns the raw pointer for DDA on success, or
+            null on failure.</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Restrictions</term>
+
+          <listitem>
+            <para/>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Errors</term>
+
+          <listitem>
+            <para>This function will have no effect and return null if:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>The abstract pointer object is not valid, or</para>
+              </listitem>
+
+              <listitem>
+                <para>The data pointed to by the abstract pointer object is
+                not stored in the
+                <function>VSIP_STORAGE_FORMAT_INTERLEAVED_COMPLEX</function>
+                format.</para>
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Notes/References</term>
+
+          <listitem>
+            <para/>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Examples</term>
+
+          <listitem>
+            <programlisting><xi:include href="examples/dda_cptr_p.c"
+                parse="text"/></programlisting>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>See Also</term>
+
+          <listitem>
+            <para/>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+    </section>
+
+    <section>
+      <title><function>vsip_dda_cptr_as_split_<replaceable>p</replaceable></function></title>
+
+      <para>This function gets the raw complex pointer for DDA.</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>Functionality</term>
+
+          <listitem>
+            <para/>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Prototypes</term>
+
+          <listitem>
+            <synopsis>int <emphasis role="bold">vsip_dda_cptr_as_split_<replaceable>f</replaceable></emphasis>(vsip_dda_pointer_<replaceable>f</replaceable> *ptr,
+                             vsip_scalar_<replaceable>f</replaceable> **r,
+                             vsip_scalar_<replaceable>f</replaceable> **i);
+
+<remark>// TODO: Define additional prototypes.</remark></synopsis>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>Arguments</term>
+
+          <listitem>
+            <variablelist>
+              <varlistentry>
+                <term>ptr</term>
+
+                <listitem>
+                  <para>This argument provides the abstract pointer object
+                  whose raw pointer will be returned.</para>
                 </listitem>
               </varlistentry>
 
               <varlistentry>
-                <term>ptr2</term>
+                <term>r</term>
 
                 <listitem>
-                  <para>This arguments contains a pointer to the pointer for
-                  DDA of the imaginary values, or a pointer to null if the
-                  implementation will provide direct access to the data in an
-                  interleaved format.</para>
+                  <para>This argument contains a pointer to the raw pointer
+                  for DDA of the real values.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>i</term>
+
+                <listitem>
+                  <para>This argument provides a pointer to the raw pointer
+                  for DDA of the imaginary values.</para>
                 </listitem>
               </varlistentry>
             </variablelist>
@@ -545,7 +813,20 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
 
           <listitem>
             <para>This function will have no effect and return a non-zero
-            value if the proxy object is not valid.</para>
+            value if:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>The abstract pointer object is not valid, or</para>
+              </listitem>
+
+              <listitem>
+                <para>The data pointed to by the abstract pointer object is
+                not stored in the
+                <function>VSIP_STORAGE_FORMAT_SPLIT_COMPLEX</function>
+                format.</para>
+              </listitem>
+            </itemizedlist>
           </listitem>
         </varlistentry>
 
@@ -596,12 +877,12 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
           <listitem>
             <synopsis>vsip_dda_data_<replaceable>f</replaceable> *<emphasis
                 role="bold">vsip_dda_datacreate_<replaceable>f</replaceable></emphasis>(vsip_block_<replaceable>f</replaceable> *block,
-                                       vsip_dda_datalayout_f *layout,
+                                       vsip_datalayout *layout,
                                        vsip_dda_sync_policy sync_policy,
                                        vsip_scalar_<replaceable>f</replaceable> *buffer);
 
 vsip_dda_cdata_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_cdatacreate_<replaceable>f</replaceable></emphasis>(vsip_cblock_<replaceable>f</replaceable> *block,
-                                         vsip_dda_cdatalayout_f *layout,
+                                         vsip_cdatalayout *layout,
                                          vsip_dda_sync_policy sync_policy,
                                          vsip_scalar_<replaceable>f</replaceable> *buffer);
 
@@ -1053,11 +1334,11 @@ void <emphasis role="bold">vsip_dda_cdatagetattrib_<replaceable>f</replaceable><
           <listitem>
             <synopsis>
 vsip_length <emphasis role="bold">vsip_dda_required_buffer_size_<replaceable>f</replaceable></emphasis>(vsip_block_<replaceable>f</replaceable> *block,
-                                            vsip_dda_datalayout_f *layout,
+                                            vsip_datalayout *layout,
                                             vsip_dda_sync_policy sync_policy);
 
 vsip_length <emphasis role="bold">vsip_dda_crequired_buffer_size_<replaceable>f</replaceable></emphasis>(vsip_cblock_<replaceable>f</replaceable> *block,
-                                             vsip_dda_cdatalayout_f *layout,
+                                             vsip_cdatalayout *layout,
                                              vsip_dda_sync_policy sync_policy);
 
 <remark>// TODO: Define additional prototypes.</remark></synopsis>
@@ -1418,4 +1699,4 @@ int <emphasis role="bold">vsip_dda_csync_out_<replaceable>f</replaceable></empha
       </variablelist>
     </section>
   </section>
-</chapter>
+</section>
