@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<section version="5.0" xml:id="dda" xmlns="http://docbook.org/ns/docbook"
+<chapter label="4" version="5.0" xml:id="dda"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns6="http://www.w3.org/1999/xlink"
          xmlns:ns5="http://www.w3.org/2000/svg"
@@ -8,7 +9,8 @@
          xmlns:m="http://www.w3.org/1998/Math/MathML">
   <title>Direct Data Access Functions</title>
 
-  <para><remark>The following will be added as section 2.6.</remark></para>
+  <para><remark>The following will be added as chapter 4; subsequent chapters
+  will be renumbered accordingly.</remark></para>
 
   <section>
     <title>Introduction</title>
@@ -177,29 +179,56 @@ typedef struct vsip_dda_ptrobject_<emphasis>f</emphasis> vsip_dda_pointer_<empha
     </section>
 
     <section>
+      <title>DDA "View" Attributes</title>
+
+      <para>The view-specific attributes associated with a DDA proxy object do
+      not necessarily correspond to the attributes of an existing view into
+      the proxied block. Not only might there be multiple views associated
+      with a block, but the view-specific attributes associated with a DDA
+      proxy object might be different than those of any existing view into the
+      proxied block. In that sense, the DDA proxy object can be thought of as
+      a new view into a block that provides direct access.</para>
+
+      <para>The view-specific attributes associated with a DDA proxy object
+      are defined as follows.</para>
+
+      <synopsis>typedef struct
+{
+  vsip_offset offset;
+  vsip_stride z_length;
+  vsip_length z_stride;
+  vsip_stride y_length;
+  vsip_length y_stride;
+  vsip_stride x_length;
+  vsip_length x_stride;
+} <emphasis role="bold">vsip_dda_viewattr</emphasis>;
+</synopsis>
+
+      <remark>There are a number of ways we could define the DDA view
+      attributes. 1) As shown above, by defining a new type- and
+      dimension-agnostic attribute type that does not provide a pointer to the
+      block memory. This begs the question: do we need the block pointer for
+      DDA, or rather, do we want to expose it to the user? 2) Using the tensor
+      attributes type as part of the proxy object attributes type, but this
+      requires that we have type-specific DDA proxy attribute types since the
+      block pointer is type-specific. 3) Create dimension- and type-specific
+      proxy attribute types that use the respective view attribute types, and
+      consequently create dimension- and type-specific DDA APIs as
+      well.</remark>
+    </section>
+
+    <section>
       <title>Proxy Object Attributes</title>
 
-      <para>The DDA proxy object attributes associated with blocks of vectors
-      of floating-point data are defined as follows.</para>
+      <para>The attributes of a DDA proxy object are defined as
+      follows.</para>
 
       <synopsis>typedef struct
 {
-  vsip_vattr_<replaceable>f</replaceable> *attrib;
+  vsip_dda_viewattr *attrib;
   vsip_datalayout *layout;
   vsip_dda_sync_policy sync_policy;
-} <emphasis role="bold">vsip_dda_dataobjectattr_<replaceable>f</replaceable></emphasis>;</synopsis>
-
-      <para>The DDA proxy object attributes associated with blocks of complex
-      floating-point data are defined as follows.</para>
-
-      <synopsis>typedef struct
-{
-  vsip_cvattr_<replaceable>f</replaceable> *attrib;
-  vsip_datalayout *layout;
-  vsip_dda_sync_policy sync_policy;
-} <emphasis role="bold">vsip_dda_cdataobjectattr_<replaceable>f</replaceable></emphasis>;</synopsis>
-
-      <para><remark>TODO: Define additional attribute types.</remark></para>
+} <emphasis role="bold">vsip_dda_dataattr</emphasis>;</synopsis>
     </section>
   </section>
 
@@ -877,11 +906,13 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
           <listitem>
             <synopsis>vsip_dda_data_<replaceable>f</replaceable> *<emphasis
                 role="bold">vsip_dda_datacreate_<replaceable>f</replaceable></emphasis>(vsip_block_<replaceable>f</replaceable> *block,
+                                       vsip_dda_viewattr *attrib,
                                        vsip_datalayout *layout,
                                        vsip_dda_sync_policy sync_policy,
                                        vsip_scalar_<replaceable>f</replaceable> *buffer);
 
 vsip_dda_cdata_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_cdatacreate_<replaceable>f</replaceable></emphasis>(vsip_cblock_<replaceable>f</replaceable> *block,
+                                         vsip_dda_viewattr *attrib,
                                          vsip_cdatalayout *layout,
                                          vsip_dda_sync_policy sync_policy,
                                          vsip_scalar_<replaceable>f</replaceable> *buffer);
@@ -901,6 +932,20 @@ vsip_dda_cdata_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_cdat
                 <listitem>
                   <para>This argument provides the block for which the DDA
                   proxy object will be created.</para>
+                </listitem>
+              </varlistentry>
+
+              <varlistentry>
+                <term>attrib</term>
+
+                <listitem>
+                  <para>This argument provides the view attributes to use for
+                  the proxy object. The </para>
+
+                  <remark>It's not immediately clear how the implementation
+                  will determine view attributes from the block in the event
+                  they are not provided, so not providing the attributes will
+                  trigger an error.</remark>
                 </listitem>
               </varlistentry>
 
@@ -970,7 +1015,16 @@ vsip_dda_cdata_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_cdat
 
             <itemizedlist>
               <listitem>
-                <para>The block object is not valid, or</para>
+                <para>The block object is not valid,</para>
+              </listitem>
+
+              <listitem>
+                <para>The view attributes are not valid, </para>
+              </listitem>
+
+              <listitem>
+                <para>The view attributes specify a view that exceeds the
+                bounds of the block memory, or</para>
               </listitem>
 
               <listitem>
@@ -1699,4 +1753,4 @@ int <emphasis role="bold">vsip_dda_csync_out_<replaceable>f</replaceable></empha
       </variablelist>
     </section>
   </section>
-</section>
+</chapter>

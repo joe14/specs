@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter label="2" version="5.0" xml:id="types" xmlns="http://docbook.org/ns/docbook"
+<chapter label="2" version="5.0" xml:id="types"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns6="http://www.w3.org/1999/xlink"
          xmlns:ns5="http://www.w3.org/2000/svg"
@@ -12,61 +13,64 @@
     <title>Type - Introduction</title>
 
     <para><remark>Section 2.1 in the VSIPL 1.4 specification will not be
-    changed.</remark></para>    
+    changed.</remark></para>
   </section>
 
   <section>
     <title>Scalar</title>
-    
+
     <para><remark>Section 2.2 in the VSIPL 1.4 specification will not be
-    changed.</remark></para>    
+    changed.</remark></para>
   </section>
 
   <section>
     <title>Random Number Generator</title>
-    
+
     <para><remark>Section 2.3 in the VSIPL 1.4 specification will not be
-    changed.</remark></para>    
+    changed.</remark></para>
   </section>
 
   <xi:include href="block_object.xml"/>
-  
+
   <xi:include href="block_layout.xml"/>
-  
-  <xi:include href="dda.xml"/>
 
   <section>
     <title>Vector View</title>
 
-    <para><remark>Section 2.5 in the VSIPL 1.4 specification will be renumbered
-    as section 2.7; no other changes will take place.</remark></para>    
+    <para><remark>Section 2.5 in the VSIPL 1.4 specification will be
+    renumbered as section 2.7; no other changes will take
+    place.</remark></para>
   </section>
 
   <section>
     <title>Matrix View</title>
 
-    <para><remark>Section 2.6 in the VSIPL 1.4 specification will be renumbered
-    as section 2.8; no other changes will take place.</remark></para>    
+    <para><remark>Section 2.6 in the VSIPL 1.4 specification will be
+    renumbered as section 2.8; no other changes will take
+    place.</remark></para>
   </section>
 
   <section>
     <title>Tensor View</title>
 
-    <para><remark>Section 2.7 in the VSIPL 1.4 specification will be renumbered
-    as section 2.9; no other changes will take place.</remark></para>    
+    <para><remark>Section 2.7 in the VSIPL 1.4 specification will be
+    renumbered as section 2.9; no other changes will take
+    place.</remark></para>
   </section>
 
   <section>
     <title>Signal Processing</title>
 
-    <para><remark>Section 2.8 in the VSIPL 1.4 specification will be renumbered
-    as section 2.10; no other changes will take place.</remark></para>    
+    <para><remark>Section 2.8 in the VSIPL 1.4 specification will be
+    renumbered as section 2.10; no other changes will take
+    place.</remark></para>
   </section>
 
   <section>
     <title>Linear Algebra</title>
 
-    <para><remark>Section 2.9 in the VSIPL 1.4 specification will be renumbered
-    as section 2.11; no other changes will take place.</remark></para>    
+    <para><remark>Section 2.9 in the VSIPL 1.4 specification will be
+    renumbered as section 2.11; no other changes will take
+    place.</remark></para>
   </section>
 </chapter>

@@ -6,9 +6,9 @@
   <info>
     <title>VSIPL DDA Additions [DRAFT]</title>
 
-    <subtitle>Version 0.8</subtitle>
+    <subtitle>Version 0.9</subtitle>
 
-    <titleabbrev>VSIPL DDA Additions 0.8 [DRAFT]</titleabbrev>
+    <titleabbrev>VSIPL DDA Additions 0.9 [DRAFT]</titleabbrev>
 
     <pubdate>
       <?dbtimestamp format="Y-m-d"?>
@@ -81,8 +81,22 @@
         layout types no longer have DDA-specific names; shortened dimension
         type names</revremark>
       </revision>
+
+      <revision>
+        <revnumber>0.9</revnumber>
+
+        <date>XX Jan 2014</date>
+
+        <revremark>Moved the DDA API out into a separate chapter, left the
+        block layout types in with the VSIPL types; Change the "view"
+        attributes in the proxy object attributes to be a newly-defined
+        DDA-specific type; added remark to discuss the options in the
+        regard... no too happy with the approach</revremark>
+      </revision>
     </revhistory>
   </preface>
 
   <xi:include href="types.xml"/>
+
+  <xi:include href="dda.xml"/>
 </book>
