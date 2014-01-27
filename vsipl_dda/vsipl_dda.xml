@@ -6,9 +6,9 @@
   <info>
     <title>VSIPL DDA Additions [DRAFT]</title>
 
-    <subtitle>Version 0.9</subtitle>
+    <subtitle>Version 0.9b</subtitle>
 
-    <titleabbrev>VSIPL DDA Additions 0.9 [DRAFT]</titleabbrev>
+    <titleabbrev>VSIPL DDA Additions 0.9b [DRAFT]</titleabbrev>
 
     <pubdate>
       <?dbtimestamp format="Y-m-d"?>
@@ -83,15 +83,16 @@
       </revision>
 
       <revision>
-        <revnumber>0.9</revnumber>
+        <revnumber>0.9b</revnumber>
 
-        <date>XX Jan 2014</date>
+        <date>XX Xxx XXXX</date>
 
         <revremark>Moved the DDA API out into a separate chapter, left the
         block layout types in with the VSIPL types; Change the "view"
         attributes in the proxy object attributes to be a newly-defined
-        DDA-specific type; added remark to discuss the options in the
-        regard... no too happy with the approach</revremark>
+        DDA-specific type; Added remarks to discuss the various attribute
+        definition options; Clarified the language with respect to the
+        datagetattrib function.</revremark>
       </revision>
     </revhistory>
   </preface>

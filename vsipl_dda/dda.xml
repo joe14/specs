@@ -181,6 +181,11 @@ typedef struct vsip_dda_ptrobject_<emphasis>f</emphasis> vsip_dda_pointer_<empha
     <section>
       <title>DDA "View" Attributes</title>
 
+      <remark>There is a fundamental difference between VSIPL++ and VSIPL when
+      it comes to blocks in that VSIPL++ blocks have a Domain (i.e. length and
+      stride in multiple dimensions) and VSIPL blocks have only a single
+      length parameter.</remark>
+
       <para>The view-specific attributes associated with a DDA proxy object do
       not necessarily correspond to the attributes of an existing view into
       the proxied block. Not only might there be multiple views associated
@@ -204,17 +209,19 @@ typedef struct vsip_dda_ptrobject_<emphasis>f</emphasis> vsip_dda_pointer_<empha
 } <emphasis role="bold">vsip_dda_viewattr</emphasis>;
 </synopsis>
 
-      <remark>There are a number of ways we could define the DDA view
-      attributes. 1) As shown above, by defining a new type- and
-      dimension-agnostic attribute type that does not provide a pointer to the
-      block memory. This begs the question: do we need the block pointer for
-      DDA, or rather, do we want to expose it to the user? 2) Using the tensor
-      attributes type as part of the proxy object attributes type, but this
-      requires that we have type-specific DDA proxy attribute types since the
-      block pointer is type-specific. 3) Create dimension- and type-specific
-      proxy attribute types that use the respective view attribute types, and
-      consequently create dimension- and type-specific DDA APIs as
-      well.</remark>
+      <remark>There are a number of ways we could handle the DDA "view"
+      attributes. 1) As shown in this version of the draft, we can add a data
+      structure to the proxy attributes below.1a) As shown above, by defining
+      a new type- and dimension-agnostic attribute type that does not provide
+      a pointer to the block memory. 1b) Using the tensor attributes type as
+      part of the proxy object attributes type, but this requires that we have
+      type-specific DDA proxy attribute types since the block pointer is
+      type-specific. Note this this approach will put an often invalid block
+      pointer in the proxy object attributes. 1c) Create dimension- and
+      type-specific proxy attribute types that use the respective view
+      attribute types, and consequently create dimension- and type-specific
+      DDA APIs as well. This will also put a block pointer in the proxy object
+      attributes, but it will at least be valid.</remark>
     </section>
 
     <section>
@@ -940,12 +947,13 @@ vsip_dda_cdata_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_cdat
 
                 <listitem>
                   <para>This argument provides the view attributes to use for
-                  the proxy object. The </para>
+                  the proxy object.</para>
 
                   <remark>It's not immediately clear how the implementation
                   will determine view attributes from the block in the event
                   they are not provided, so not providing the attributes will
-                  trigger an error.</remark>
+                  trigger an error. The user must create and populate the
+                  structure themselves</remark>
                 </listitem>
               </varlistentry>
 
@@ -1019,7 +1027,7 @@ vsip_dda_cdata_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_cdat
               </listitem>
 
               <listitem>
-                <para>The view attributes are not valid, </para>
+                <para>The view attributes are not valid,</para>
               </listitem>
 
               <listitem>
@@ -1221,9 +1229,9 @@ void <emphasis role="bold">vsip_dda_cdatagetattrib_<replaceable>f</replaceable><
           <term>Return Value</term>
 
           <listitem>
-            <para>This function updates the proxy object attributes with the
-            proxy object's attributes on successful completion, and makes no
-            changes to the proxy object attributes on failure.</para>
+            <para>This function populates the attributes parameter with the
+            values associated with the proxy object on successful completion,
+            and makes no changes on failure.</para>
           </listitem>
         </varlistentry>
 
@@ -1239,9 +1247,9 @@ void <emphasis role="bold">vsip_dda_cdatagetattrib_<replaceable>f</replaceable><
           <term>Errors</term>
 
           <listitem>
-            <para>This function will not update the proxy object attributes if
-            the proxy object is not valid or if the proxy object attributes
-            are null.</para>
+            <para>This function will not update the attributes parameter if
+            the proxy object is not valid or if the attributes parameter is
+            null.</para>
           </listitem>
         </varlistentry>
 
