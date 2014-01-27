@@ -6,9 +6,9 @@
   <info>
     <title>VSIPL DDA Additions [DRAFT]</title>
 
-    <subtitle>Version 0.9b</subtitle>
+    <subtitle>Version 0.9</subtitle>
 
-    <titleabbrev>VSIPL DDA Additions 0.9b [DRAFT]</titleabbrev>
+    <titleabbrev>VSIPL DDA Additions 0.9 [DRAFT]</titleabbrev>
 
     <pubdate>
       <?dbtimestamp format="Y-m-d"?>
@@ -83,7 +83,7 @@
       </revision>
 
       <revision>
-        <revnumber>0.9b</revnumber>
+        <revnumber>0.9</revnumber>
 
         <date>XX Xxx XXXX</date>
 
