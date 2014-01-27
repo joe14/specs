@@ -6,9 +6,9 @@
   <info>
     <title>VSIPL DDA Additions [DRAFT]</title>
 
-    <subtitle>Version 0.9</subtitle>
+    <subtitle>Version 0.8a</subtitle>
 
-    <titleabbrev>VSIPL DDA Additions 0.9 [DRAFT]</titleabbrev>
+    <titleabbrev>VSIPL DDA Additions 0.8a [DRAFT]</titleabbrev>
 
     <pubdate>
       <?dbtimestamp format="Y-m-d"?>
@@ -83,9 +83,9 @@
       </revision>
 
       <revision>
-        <revnumber>0.9</revnumber>
+        <revnumber>0.8a</revnumber>
 
-        <date>XX Xxx XXXX</date>
+        <date>27 Jan 2014</date>
 
         <revremark>Moved the DDA API out into a separate chapter, left the
         block layout types in with the VSIPL types; Change the "view"
