@@ -83,16 +83,16 @@
       </revision>
 
       <revision>
-        <revnumber>0.8a</revnumber>
+        <revnumber>0.8b</revnumber>
 
         <date>27 Jan 2014</date>
 
         <revremark>Moved the DDA API out into a separate chapter, left the
-        block layout types in with the VSIPL types; Change the "view"
-        attributes in the proxy object attributes to be a newly-defined
-        DDA-specific type; Added remarks to discuss the various attribute
-        definition options; Clarified the language with respect to the
-        datagetattrib function.</revremark>
+        block layout types in with the VSIPL types; Clarified the language
+        with respect to the return value of the datagetattrib function; Added
+        block length to the proxy object attributes in place of the view
+        attributes; Removed the abstract pointer type and simplified the
+        complex pointer accessor API accordingly.</revremark>
       </revision>
     </revhistory>
   </preface>
