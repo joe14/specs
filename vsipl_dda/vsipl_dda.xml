@@ -100,7 +100,7 @@
 
         <date>4 Feb 2014</date>
 
-        <revremark>Change DDA objects to be bulit on top of view instead of
+        <revremark>Changed DDA objects to be built on top of view instead of
         blocks; Added a comment for discussion RE creation of the tuple type;
         Added a replaceable character "k" to type and function definitions to
         account for the associated view type.</revremark>

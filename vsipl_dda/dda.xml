@@ -207,7 +207,7 @@ typedef struct vsip_dda_c<replaceable>k</replaceable>dataobject_<replaceable>f</
 
       <synopsis>typedef struct
 {
-  vsip_<replaceable>k</replaceable>attr_vi attrib;
+  vsip_<replaceable>k</replaceable>attr_vi *attrib;
   vsip_datalayout *layout;
   vsip_dda_sync_policy sync_policy;
 } <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>dataattr_vi</emphasis>;</synopsis>
@@ -217,7 +217,7 @@ typedef struct vsip_dda_c<replaceable>k</replaceable>dataobject_<replaceable>f</
 
       <synopsis>typedef struct
 {
-  vsip_<replaceable>k</replaceable>attr_mi attrib;
+  vsip_<replaceable>k</replaceable>attr_mi *attrib;
   vsip_datalayout *layout;
   vsip_dda_sync_policy sync_policy;
 } <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>dataattr_mi</emphasis>;</synopsis>
@@ -227,7 +227,7 @@ typedef struct vsip_dda_c<replaceable>k</replaceable>dataobject_<replaceable>f</
 
       <synopsis>typedef struct
 {
-  vsip_<replaceable>k</replaceable>attr_ti attrib;
+  vsip_<replaceable>k</replaceable>attr_ti *attrib;
   vsip_datalayout *layout;
   vsip_dda_sync_policy sync_policy;
 } <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>dataattr_ti</emphasis>;</synopsis>
@@ -237,7 +237,7 @@ typedef struct vsip_dda_c<replaceable>k</replaceable>dataobject_<replaceable>f</
 
       <synopsis>typedef struct
 {
-  vsip_<replaceable>k</replaceable>attr_bl attrib;
+  vsip_<replaceable>k</replaceable>attr_bl *attrib;
   vsip_datalayout *layout;
   vsip_dda_sync_policy sync_policy;
 } <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>dataattr_bl</emphasis>;</synopsis>
@@ -247,7 +247,7 @@ typedef struct vsip_dda_c<replaceable>k</replaceable>dataobject_<replaceable>f</
 
       <synopsis>typedef struct
 {
-  vsip_<replaceable>k</replaceable>attr_<replaceable>i</replaceable> attrib;
+  vsip_<replaceable>k</replaceable>attr_<replaceable>i</replaceable> *attrib;
   vsip_datalayout *layout;
   vsip_dda_sync_policy sync_policy;
 } <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>dataattr_<replaceable>i</replaceable></emphasis>;</synopsis>
@@ -257,7 +257,7 @@ typedef struct vsip_dda_c<replaceable>k</replaceable>dataobject_<replaceable>f</
 
       <synopsis>typedef struct
 {
-  vsip_c<replaceable>k</replaceable>attr_<replaceable>i</replaceable> attrib;
+  vsip_c<replaceable>k</replaceable>attr_<replaceable>i</replaceable> *attrib;
   vsip_datalayout *layout;
   vsip_dda_sync_policy sync_policy;
 } <emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>dataattr_<replaceable>i</replaceable></emphasis>;</synopsis>
@@ -267,7 +267,7 @@ typedef struct vsip_dda_c<replaceable>k</replaceable>dataobject_<replaceable>f</
 
       <synopsis>typedef struct
 {
-  vsip_<replaceable>k</replaceable>attr_<replaceable>f</replaceable> attrib;
+  vsip_<replaceable>k</replaceable>attr_<replaceable>f</replaceable> *attrib;
   vsip_datalayout *layout;
   vsip_dda_sync_policy sync_policy;
 } <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>dataattr_<replaceable>f</replaceable></emphasis>;</synopsis>
@@ -277,7 +277,7 @@ typedef struct vsip_dda_c<replaceable>k</replaceable>dataobject_<replaceable>f</
 
       <synopsis>typedef struct
 {
-  vsip_c<replaceable>k</replaceable>attr_<replaceable>f</replaceable> attrib;
+  vsip_c<replaceable>k</replaceable>attr_<replaceable>f</replaceable> *attrib;
   vsip_datalayout *layout;
   vsip_dda_sync_policy sync_policy;
 } <emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>dataattr_<replaceable>f</replaceable></emphasis>;</synopsis>
@@ -285,21 +285,6 @@ typedef struct vsip_dda_c<replaceable>k</replaceable>dataobject_<replaceable>f</
       <para><remark>Thoughts:</remark></para>
 
       <itemizedlist>
-        <listitem>
-          <remark>The problem with defining type-agnostic proxy attributes is
-          that the attributes alone are not enough to tell you the size (in
-          bytes) of the data because the length is given in elements, and the
-          size of an element is not known. The user can easily figure this out
-          from the associated call, so it might not be an issue.</remark>
-        </listitem>
-
-        <listitem>
-          <remark>Another problem is that having only the length in the
-          attributes, although conforming to the way that VSIPL blocks are
-          defined, does not give the implementation the freedom to change the
-          stride.</remark>
-        </listitem>
-
         <listitem>
           <remark>The VSIPL DDA APIs below return raw pointers to the data
           that when incremented provide the next address in memory, and not
