@@ -119,6 +119,11 @@ vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_TROW_MAJOR</emphasis> 
 vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_VCOL_MAJOR</emphasis> = {0, 1, 2};
 vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_MCOL_MAJOR</emphasis> = {1, 0, 2};
 vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_TCOL_MAJOR</emphasis> = {2, 1, 0};</synopsis>
+
+      <remark>VSIPL already defines a tuple type, but not generically. In
+      particular, the tensor index type is defined almost identically to this
+      tuple type here. That of course begs the question as to whether or not
+      we are justified in defining a new type here.</remark>
     </section>
 
     <section>

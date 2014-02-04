@@ -15,10 +15,17 @@
   <section>
     <title>Introduction</title>
 
-    <para>Direct Data Access (DDA) provides the means to access block data via
-    raw pointers, independent of how the block holds the data. This proxy
+    <para>Direct Data Access (DDA) provides the means to access view data via
+    raw pointers, independent of how the view holds the data. This proxy
     access can be used to bridge locally with code expecting raw pointers
-    without breaking the block abstraction.</para>
+    without breaking the view abstraction.</para>
+
+    <para>In this section, many types and functions are defined with an
+    additional replaceable character,
+    <function><replaceable>k</replaceable></function>, that represents one of
+    the supported view types according to its character designator;
+    <function>v</function> for vector, <function>m</function> for matrix, and
+    <function>t</function> for tensor.</para>
 
     <para><remark>TODO: The addition of DDA to VSIPL will require re-wording
     of section 1.7.2.3 of version 1.4 of the VSIPL specification, which
@@ -28,41 +35,41 @@
   <section>
     <title>Fundamentals</title>
 
-    <para>The implementation may provide direct access to the block's own
+    <para>The implementation may provide direct access to the view's own
     storage, or a temporary copy may be created. In either case, the memory to
     which the DDA pointer refers is in the VSIPL space. There is a third case:
     user space memory is provided and the DDA pointer refers to that user
     space memory instead.</para>
 
-    <para>In the descriptions that follow, the block's own storage will be
-    referred to simply as <emphasis>block memory</emphasis>. VSIPL space
-    memory created by the implementation to store a temporary copy of the
-    block's data for direct access will be referred to as a <emphasis>VSIPL
-    space DDA buffer</emphasis>. User space memory provided to store a
-    temporary copy of the block's data for direct access will be referred to
-    as a <emphasis>user space DDA buffer</emphasis>. The term <emphasis>DDA
-    buffer</emphasis> will be used when the buffer memory may be in either the
-    VSIPL space or user space.</para>
+    <para>In the descriptions that follow, the view's own storage will be
+    referred to simply as <emphasis>view memory</emphasis>. VSIPL space memory
+    created by the implementation to store a temporary copy of the view's data
+    for direct access will be referred to as a <emphasis>VSIPL space DDA
+    buffer</emphasis>. User space memory provided to store a temporary copy of
+    the view's data for direct access will be referred to as a <emphasis>user
+    space DDA buffer</emphasis>. The term <emphasis>DDA buffer</emphasis> will
+    be used when the buffer memory may be in either the VSIPL space or user
+    space.</para>
 
-    <para>In the event that the layout of the data in block memory is not
+    <para>In the event that the layout of the data in view memory is not
     well-suited for DDA, the implementation may lay out the data in a DDA
-    buffer differently than in the block memory. In such cases, if no user
+    buffer differently than in the view memory. In such cases, if no user
     space DDA buffer is provided, a VSIPL space DDA buffer will be created to
     accommodate the alternate layout. Additionally, the layout of the data in
     a DDA buffer may be specified as described in more detail below.</para>
 
-    <para>If a DDA buffer is used, data must be synchronized between the block
+    <para>If a DDA buffer is used, data must be synchronized between the view
     memory and the DDA buffer; the data synchronization paradigm is described
     in more detail below. It is important to note that synchronization will
     incur additional overhead: the
-    <function>vsip_dda_<replaceable>d</replaceable>required_buffer_size_<replaceable>p</replaceable>()</function>
+    <function>vsip_dda_<replaceable>dk</replaceable>required_buffer_size_<replaceable>p</replaceable>()</function>
     and
-    <function>vsip_dda_<replaceable>d</replaceable>cost_<replaceable>p</replaceable>()</function>
+    <function>vsip_dda_<replaceable>dk</replaceable>cost_<replaceable>p</replaceable>()</function>
     functions help to quantify this overhead. That being said, there may be
     situations in which using a DDA buffer results in less overhead, in
-    aggregate, than accessing the block memory directly. For example, direct
+    aggregate, than accessing the view memory directly. For example, direct
     access via a DDA buffer in host memory may incur less overhead, in
-    aggregate, than direct access to block memory in accelerator or
+    aggregate, than direct access to view memory in accelerator or
     co-processor memory.</para>
   </section>
 
@@ -72,14 +79,14 @@
     <section>
       <title>Synchronization Policy</title>
 
-      <para>As indicated above, if DDA provides access to the block via a DDA
-      buffer, data must be synchronized between the DDA buffer and the block
+      <para>As indicated above, if DDA provides access to the view via a DDA
+      buffer, data must be synchronized between the DDA buffer and the view
       memory. When and to/ from where that synchronization occurs is specified
       by a synchronization policy.</para>
 
-      <para>Blocks may be accessed via DDA as input (read-only), output
+      <para>Views may be accessed via DDA as input (read-only), output
       (write-only), or input and output (read-write). In addition, the
-      implementation can be instructed to provide access to blocks via a DDA
+      implementation can be instructed to provide access to views via a DDA
       buffer, regardless of whether it would have otherwise.</para>
 
       <para>Synchronization policies are named from the perspective of an
@@ -100,26 +107,26 @@ vsip_dda_sync_policy const <emphasis role="bold">VSIP_DDA_SYNC_POLICY_COPY</emph
       invalid.</para>
 
       <para>A <constant>VSIPL_DDA_SYNC_POLICY_IN</constant> policy indicates
-      that the block is treated as input. Data will be synchronized from the
-      block memory to the DDA buffer at creation of the proxy object, and can
-      be synchronized on-demand with a call to
-      <function>vsip_dda_<replaceable>d</replaceable>sync_in_<replaceable>p</replaceable>()</function>.</para>
+      that the view is treated as input. Data will be synchronized from the
+      view memory to the DDA buffer at creation of the data object, and can be
+      synchronized on-demand with a call to
+      <function>vsip_dda_<replaceable>dk</replaceable>sync_in_<replaceable>p</replaceable>()</function>.</para>
 
       <para>A <constant>VSIP_DDA_SYNC_POLICY_OUT</constant> policy indicates
-      that the block is treated as output. Data will be synchronized from the
-      DDA buffer to the block memory at destruction of the proxy object, and
-      can be synchronized on-demand with a call to
-      <function>vsip_dda_<replaceable>d</replaceable>sync_out_<replaceable>p</replaceable>()</function>.</para>
+      that the view is treated as output. Data will be synchronized from the
+      DDA buffer to the view memory at destruction of the data object, and can
+      be synchronized on-demand with a call to
+      <function>vsip_dda_<replaceable>dk</replaceable>sync_out_<replaceable>p</replaceable>()</function>.</para>
 
       <para>A <constant>VSIP_DDA_SYNC_POLICY_INOUT</constant> policy indicates
-      that the block is treated as both input and output. Data will be
-      synchronized from the block memory to the DDA buffer at creation of the
-      proxy object and from the DDA buffer to the block memory at destruction
-      of the proxy object. Data can be synchronized on demand from the block
-      memory to the DDA buffer with a call to
-      <function>vsip_dda_<replaceable>d</replaceable>sync_in_<replaceable>p</replaceable>()</function>,
-      and from the DDA buffer to the block memory with a call to
-      <function>vsip_dda_<replaceable>d</replaceable>sync_out_<replaceable>p</replaceable>()</function>.</para>
+      that the view is treated as both input and output. Data will be
+      synchronized from the view memory to the DDA buffer at creation of the
+      data object and from the DDA buffer to the view memory at destruction of
+      the data object. Data can be synchronized on demand from the view memory
+      to the DDA buffer with a call to
+      <function>vsip_dda_<replaceable>dk</replaceable>sync_in_<replaceable>p</replaceable>()</function>,
+      and from the DDA buffer to the view memory with a call to
+      <function>vsip_dda_<replaceable>dk</replaceable>sync_out_<replaceable>p</replaceable>()</function>.</para>
 
       <para>If the <constant>VSIP_DDA_SYNC_POLICY_OUT</constant> policy is
       used, and a DDA buffer is either implicitly or explicitly used, the DDA
@@ -127,45 +134,155 @@ vsip_dda_sync_policy const <emphasis role="bold">VSIP_DDA_SYNC_POLICY_COPY</emph
       write-only.</para>
 
       <para>A <constant>VSIP_DDA_SYNC_POLICY_COPY</constant> policy indicates
-      that the block should be copied into separate a DDA buffer, even if the
-      implementation would otherwise provide a direct access to the block
+      that the view should be copied into separate a DDA buffer, even if the
+      implementation would otherwise provide a direct access to the view
       memory.</para>
     </section>
 
     <section>
-      <title>Proxy Object</title>
+      <title>Data Object</title>
 
-      <para>The DDA proxy object for a block of floating-point data is defined
-      as follows.</para>
+      <para>The data object for a vector, matrix, or tensor of vector indices
+      is defined as follows.</para>
 
-      <synopsis>struct vsip_dda_dataobject_<replaceable>f</replaceable>;
-typedef struct vsip_dda_dataobject_<replaceable>f</replaceable> <emphasis
-          role="bold">vsip_dda_data_<replaceable>f</replaceable></emphasis>;</synopsis>
+      <synopsis>struct vsip_dda_<replaceable>k</replaceable>dataobject_vi;
+typedef struct vsip_dda_<replaceable>k</replaceable>dataobject_vi <emphasis
+          role="bold">vsip_dda_<replaceable>k</replaceable>data_vi</emphasis>;</synopsis>
 
-      <para>The DDA proxy object for a block of complex floating-point data is
+      <para>The data object for a vector, matrix, or tensor of matrix indices
+      is defined as follows.</para>
+
+      <synopsis>struct vsip_dda_<replaceable>k</replaceable>dataobject_mi;
+typedef struct vsip_dda_<replaceable>k</replaceable>dataobject_mi <emphasis
+          role="bold">vsip_dda_<replaceable>k</replaceable>data_mi</emphasis>;</synopsis>
+
+      <para>The data object for a vector, matrix, or tensor of tensor indices
+      is defined as follows.</para>
+
+      <synopsis>struct vsip_dda_<replaceable>k</replaceable>dataobject_ti;
+typedef struct vsip_dda_<replaceable>k</replaceable>dataobject_ti <emphasis
+          role="bold">vsip_dda_<replaceable>k</replaceable>data_ti</emphasis>;</synopsis>
+
+      <para>The data object for a vector, matrix, or tensor of boolean data is
       defined as follows.</para>
 
-      <synopsis>struct vsip_dda_cdataobject_<replaceable>f</replaceable>;
-typedef struct vsip_dda_cdataobject_<replaceable>f</replaceable> <emphasis
-          role="bold">vsip_dda_cdata_<replaceable>f</replaceable></emphasis>;</synopsis>
+      <synopsis>struct vsip_dda_<replaceable>k</replaceable>dataobject_bl;
+typedef struct vsip_dda_<replaceable>k</replaceable>dataobject_bl <emphasis
+          role="bold">vsip_dda_<replaceable>k</replaceable>data_bl</emphasis>;</synopsis>
 
-      <remark>TODO: Define other proxy object types.</remark>
+      <para>The data object for a vector, matrix, or tensor of integer data is
+      defined as follows.</para>
+
+      <synopsis>struct vsip_dda_<replaceable>k</replaceable>dataobject_<replaceable>i</replaceable>;
+typedef struct vsip_dda_<replaceable>k</replaceable>dataobject_<replaceable>i</replaceable> <emphasis
+          role="bold">vsip_dda_<replaceable>k</replaceable>data_<replaceable>i</replaceable></emphasis>;</synopsis>
+
+      <para>The data object for a vector, matrix, or tensor of complex integer
+      data is defined as follows.</para>
+
+      <synopsis>struct vsip_dda_c<replaceable>k</replaceable>dataobject_<replaceable>i</replaceable>;
+typedef struct vsip_dda_c<replaceable>k</replaceable>dataobject_<replaceable>i</replaceable> <emphasis
+          role="bold">vsip_dda_c<replaceable>k</replaceable>data_<replaceable>i</replaceable></emphasis>;</synopsis>
+
+      <para>The data object for a vector, matrix, or tensor of floating-point
+      data is defined as follows.</para>
+
+      <synopsis>struct vsip_dda_<replaceable>k</replaceable>dataobject_<replaceable>f</replaceable>;
+typedef struct vsip_dda_<replaceable>k</replaceable>dataobject_<replaceable>f</replaceable> <emphasis
+          role="bold">vsip_dda_<replaceable>k</replaceable>data_<replaceable>f</replaceable></emphasis>;</synopsis>
+
+      <para>The data object for a vector, matrix, or tensor of complex
+      floating-point data is defined as follows.</para>
+
+      <synopsis>struct vsip_dda_c<replaceable>k</replaceable>dataobject_<replaceable>f</replaceable>;
+typedef struct vsip_dda_c<replaceable>k</replaceable>dataobject_<replaceable>f</replaceable> <emphasis
+          role="bold">vsip_dda_c<replaceable>k</replaceable>data_<replaceable>f</replaceable></emphasis>;</synopsis>
     </section>
 
     <section>
-      <title>Proxy Object Attributes</title>
+      <title>Data Object Attributes</title>
 
-      <para>The attributes of a DDA proxy object are defined as
-      follows.</para>
+      <para>The attributes of a data object used to access a vector, matrix,
+      or tensor of vector indices are defined as follows.</para>
 
       <synopsis>typedef struct
 {
-  vsip_length length;
+  vsip_<replaceable>k</replaceable>attr_vi attrib;
   vsip_datalayout *layout;
   vsip_dda_sync_policy sync_policy;
-} <emphasis role="bold">vsip_dda_dataattr</emphasis>;</synopsis>
+} <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>dataattr_vi</emphasis>;</synopsis>
 
-      <remark>Thoughts:</remark>
+      <para>The attributes of a data object used to access a vector, matrix,
+      or tensor of matrix indices are defined as follows.</para>
+
+      <synopsis>typedef struct
+{
+  vsip_<replaceable>k</replaceable>attr_mi attrib;
+  vsip_datalayout *layout;
+  vsip_dda_sync_policy sync_policy;
+} <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>dataattr_mi</emphasis>;</synopsis>
+
+      <para>The attributes of a data object used to access a vector, matrix,
+      or tensor of tensor indices are defined as follows.</para>
+
+      <synopsis>typedef struct
+{
+  vsip_<replaceable>k</replaceable>attr_ti attrib;
+  vsip_datalayout *layout;
+  vsip_dda_sync_policy sync_policy;
+} <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>dataattr_ti</emphasis>;</synopsis>
+
+      <para>The attributes of a data object used to access a vector, matrix,
+      or tensor of boolean data are defined as follows.</para>
+
+      <synopsis>typedef struct
+{
+  vsip_<replaceable>k</replaceable>attr_bl attrib;
+  vsip_datalayout *layout;
+  vsip_dda_sync_policy sync_policy;
+} <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>dataattr_bl</emphasis>;</synopsis>
+
+      <para>The attributes of a data object used to access a vector, matrix,
+      or tensor of integer data are defined as follows.</para>
+
+      <synopsis>typedef struct
+{
+  vsip_<replaceable>k</replaceable>attr_<replaceable>i</replaceable> attrib;
+  vsip_datalayout *layout;
+  vsip_dda_sync_policy sync_policy;
+} <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>dataattr_<replaceable>i</replaceable></emphasis>;</synopsis>
+
+      <para>The attributes of a data object used to access a vector, matrix,
+      or tensor of complex integer data are defined as follows.</para>
+
+      <synopsis>typedef struct
+{
+  vsip_c<replaceable>k</replaceable>attr_<replaceable>i</replaceable> attrib;
+  vsip_datalayout *layout;
+  vsip_dda_sync_policy sync_policy;
+} <emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>dataattr_<replaceable>i</replaceable></emphasis>;</synopsis>
+
+      <para>The attributes of a data object used to access a vector, matrix,
+      or tensor of floating-point data are defined as follows.</para>
+
+      <synopsis>typedef struct
+{
+  vsip_<replaceable>k</replaceable>attr_<replaceable>f</replaceable> attrib;
+  vsip_datalayout *layout;
+  vsip_dda_sync_policy sync_policy;
+} <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>dataattr_<replaceable>f</replaceable></emphasis>;</synopsis>
+
+      <para>The attributes of a data object used to access a vector, matrix,
+      or tensor of complex floating-point data are defined as follows.</para>
+
+      <synopsis>typedef struct
+{
+  vsip_c<replaceable>k</replaceable>attr_<replaceable>f</replaceable> attrib;
+  vsip_datalayout *layout;
+  vsip_dda_sync_policy sync_policy;
+} <emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>dataattr_<replaceable>f</replaceable></emphasis>;</synopsis>
+
+      <para><remark>Thoughts:</remark></para>
 
       <itemizedlist>
         <listitem>
@@ -212,79 +329,79 @@ typedef struct vsip_dda_cdataobject_<replaceable>f</replaceable> <emphasis
 
         <tbody>
           <row>
-            <entry><function>vsip_dda_<replaceable>d</replaceable>cost_<replaceable>p</replaceable></function></entry>
+            <entry><function>vsip_dda_<replaceable>dk</replaceable>cost_<replaceable>p</replaceable></function></entry>
 
             <entry>Cost Accessor</entry>
           </row>
 
-          <row>
-            <entry><function>vsip_dda_cptr_as_array_<replaceable>p</replaceable></function></entry>
+          <row rowsep="0">
+            <entry><function>vsip_dda_c<replaceable>k</replaceable>ptr_as_array_<replaceable>p</replaceable></function></entry>
 
-            <entry>Complex Pointer Accessor</entry>
+            <entry/>
+          </row>
+
+          <row rowsep="0">
+            <entry><function>vsip_dda_c<replaceable>k</replaceable>ptr_as_interleaved_<replaceable>p</replaceable></function></entry>
+
+            <entry>Complex Pointer Accessors</entry>
           </row>
 
           <row>
-            <entry><function>vsip_dda_cptr_as_interleaved_<replaceable>p</replaceable></function></entry>
+            <entry><function>vsip_dda_c<replaceable>k</replaceable>ptr_as_split_<replaceable>p</replaceable></function></entry>
 
-            <entry>Complex Pointer Accessor</entry>
+            <entry/>
           </row>
 
           <row>
-            <entry><function>vsip_dda_cptr_as_split_<replaceable>p</replaceable></function></entry>
+            <entry><function>vsip_dda_<replaceable>dk</replaceable>datacreate_<replaceable>p</replaceable></function></entry>
 
-            <entry>Complex Pointer Accessor</entry>
+            <entry>Data Object Constructor</entry>
           </row>
 
           <row>
-            <entry><function>vsip_dda_<replaceable>d</replaceable>datacreate_<replaceable>p</replaceable></function></entry>
+            <entry><function>vsip_dda_<replaceable>dk</replaceable>datadestroy_<replaceable>p</replaceable></function></entry>
 
-            <entry>Proxy Object Constructor</entry>
+            <entry>Data Object Destructor</entry>
           </row>
 
           <row>
-            <entry><function>vsip_dda_<replaceable>d</replaceable>datadestroy_<replaceable>p</replaceable></function></entry>
+            <entry><function>vsip_dda_<replaceable>dk</replaceable>datagetattrib_<replaceable>p</replaceable></function></entry>
 
-            <entry>Proxy Object Destructor</entry>
+            <entry>Data Object Attribute Accessor</entry>
           </row>
 
           <row>
-            <entry><function>vsip_dda_<replaceable>d</replaceable>datagetattrib_<replaceable>p</replaceable></function></entry>
-
-            <entry>Proxy Attribute Accessor</entry>
-          </row>
-
-          <row>
-            <entry><function>vsip_dda_ptr_<replaceable>p</replaceable></function></entry>
+            <entry><function>vsip_dda_<replaceable>k</replaceable>ptr_<replaceable>p</replaceable></function></entry>
 
             <entry>Real Pointer Accessor</entry>
           </row>
 
           <row>
-            <entry><function>vsip_dda_<replaceable>d</replaceable>required_buffer_size_<replaceable>p</replaceable></function></entry>
+            <entry><function>vsip_dda_<replaceable>dk</replaceable>required_buffer_size_<replaceable>p</replaceable></function></entry>
 
             <entry>Buffer Size Accessor</entry>
           </row>
 
           <row>
-            <entry><function>vsip_dda_<replaceable>d</replaceable>sync_in_<replaceable>p</replaceable></function></entry>
+            <entry><function>vsip_dda_<replaceable>dk</replaceable>sync_in_<replaceable>p</replaceable></function></entry>
 
-            <entry>Block to DDA Buffer Synchronization</entry>
+            <entry>View to DDA Buffer Synchronization</entry>
           </row>
 
           <row>
-            <entry><function>vsip_dda_<replaceable>d</replaceable>sync_out_<replaceable>p</replaceable></function></entry>
+            <entry><function>vsip_dda_<replaceable>dk</replaceable>sync_out_<replaceable>p</replaceable></function></entry>
 
-            <entry>DDA Buffer to Block Synchronization</entry>
+            <entry>DDA Buffer to View Synchronization</entry>
           </row>
         </tbody>
       </tgroup>
     </informaltable>
 
     <section>
-      <title><function>vsip_dda_<replaceable>d</replaceable>cost_<replaceable>p</replaceable></function></title>
+      <title>vsip_dda_<function><replaceable>dk</replaceable></function>cost_<function><replaceable>p</replaceable></function></title>
 
       <para>This function computes the cost of providing direct data access to
-      a block.</para>
+      a view.</para>
 
       <variablelist>
         <varlistentry>
@@ -299,15 +416,39 @@ typedef struct vsip_dda_cdataobject_<replaceable>f</replaceable> <emphasis
           <term>Prototypes</term>
 
           <listitem>
-            <synopsis>int <emphasis role="bold">vsip_dda_cost_<replaceable>f</replaceable></emphasis>(vsip_block_<replaceable>f</replaceable> *block,
-                    vsip_datalayout *layout,
-                    vsip_dda_sync_policy sync_policy);
-
-int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>(vsip_cblock_<replaceable>f</replaceable> *block,
-                     vsip_cdatalayout *layout,
+            <synopsis>int <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>cost_vi</emphasis>(vsip_<replaceable>k</replaceable>view_vi *view,
+                     vsip_datalayout *layout,
                      vsip_dda_sync_policy sync_policy);
 
-<remark>// TODO: Define additional prototypes.</remark></synopsis>
+int <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>cost_mi</emphasis>(vsip_<replaceable>k</replaceable>view_mi *view,
+                     vsip_datalayout *layout,
+                     vsip_dda_sync_policy sync_policy);
+
+int <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>cost_ti</emphasis>(vsip_<replaceable>k</replaceable>view_ti *view,
+                     vsip_datalayout *layout,
+                     vsip_dda_sync_policy sync_policy);
+
+int <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>cost_bl</emphasis>(vsip_<replaceable>k</replaceable>view_bl *view,
+                     vsip_datalayout *layout,
+                     vsip_dda_sync_policy sync_policy);
+
+int <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>cost_<replaceable>i</replaceable></emphasis>(vsip_<replaceable>k</replaceable>view_<replaceable>i</replaceable> *view,
+                     vsip_datalayout *layout,
+                     vsip_dda_sync_policy sync_policy);
+
+int <emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>cost_<replaceable>i</replaceable></emphasis>(vsip_c<replaceable>k</replaceable>view_<replaceable>i</replaceable> *view,
+                      vsip_cdatalayout *layout,
+                      vsip_dda_sync_policy sync_policy);
+
+int <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>cost_<replaceable>f</replaceable></emphasis>(vsip_<replaceable>k</replaceable>view_<replaceable>f</replaceable> *view,
+                     vsip_datalayout *layout,
+                     vsip_dda_sync_policy sync_policy);
+
+int <emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>cost_<replaceable>f</replaceable></emphasis>(vsip_c<replaceable>k</replaceable>view_<replaceable>f</replaceable> *view,
+                      vsip_cdatalayout *layout,
+                      vsip_dda_sync_policy sync_policy);
+
+</synopsis>
           </listitem>
         </varlistentry>
 
@@ -317,10 +458,10 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
           <listitem>
             <variablelist>
               <varlistentry>
-                <term>block</term>
+                <term>view</term>
 
                 <listitem>
-                  <para>This argument provides the block for which the cost of
+                  <para>This argument provides the view for which the cost of
                   DDA will be computed.</para>
                 </listitem>
               </varlistentry>
@@ -331,7 +472,7 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
                 <listitem>
                   <para>This argument provides the layout attributes to use
                   when computing the cost of DDA. Null layout attributes
-                  indicate that the function should use the block's layout in
+                  indicate that the function should use the view's layout in
                   computing the cost.</para>
                 </listitem>
               </varlistentry>
@@ -353,7 +494,7 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
 
           <listitem>
             <para>This function returns a numeric value representing the cost
-            of accessing the block via DDA.</para>
+            of accessing the view via DDA.</para>
           </listitem>
         </varlistentry>
 
@@ -373,7 +514,7 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
 
             <itemizedlist>
               <listitem>
-                <para>The block object is not valid, or</para>
+                <para>The view is not valid, or</para>
               </listitem>
 
               <listitem>
@@ -411,7 +552,7 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
     </section>
 
     <section>
-      <title><function>vsip_dda_cptr_as_array_<replaceable>p</replaceable></function></title>
+      <title>vsip_dda_c<function><replaceable>k</replaceable></function>ptr_as_array_<function><replaceable>p</replaceable></function></title>
 
       <para>This function gets the raw complex pointer for DDA.</para>
 
@@ -428,10 +569,13 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
           <term>Prototypes</term>
 
           <listitem>
-            <synopsis>vsip_cscalar_<emphasis><replaceable>f</replaceable></emphasis> *<emphasis
-                role="bold">vsip_dda_cptr_as_array_<replaceable>f</replaceable></emphasis>(vsip_dda_cdata_<replaceable>f</replaceable> *data);
+            <synopsis>vsip_cscalar_<emphasis><replaceable>i</replaceable></emphasis> *<emphasis
+                role="bold">vsip_dda_c<replaceable>k</replaceable>ptr_as_array_<replaceable>i</replaceable></emphasis>(vsip_dda_c<replaceable>k</replaceable>data_<replaceable>i</replaceable> *data);
 
-<remark>// TODO: Define additional prototypes.</remark></synopsis>
+vsip_cscalar_<emphasis><replaceable>f</replaceable></emphasis> *<emphasis
+                role="bold">vsip_dda_c<replaceable>k</replaceable>ptr_as_array_<replaceable>f</replaceable></emphasis>(vsip_dda_c<replaceable>k</replaceable>data_<replaceable>f</replaceable> *data);
+
+</synopsis>
           </listitem>
         </varlistentry>
 
@@ -444,7 +588,7 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
                 <term>data</term>
 
                 <listitem>
-                  <para>This argument provides the proxy object whose raw
+                  <para>This argument provides the data object whose raw
                   pointer will be returned.</para>
                 </listitem>
               </varlistentry>
@@ -477,7 +621,7 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
 
             <itemizedlist>
               <listitem>
-                <para>The proxy object is not valid, or</para>
+                <para>The data object is not valid, or</para>
               </listitem>
 
               <listitem>
@@ -516,7 +660,7 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
     </section>
 
     <section>
-      <title><function>vsip_dda_cptr_as_interleaved_<replaceable>p</replaceable></function></title>
+      <title>vsip_dda_c<function><replaceable>k</replaceable></function>ptr_as_interleaved_<function><replaceable>p</replaceable></function></title>
 
       <para>This function gets the raw complex pointer for DDA.</para>
 
@@ -533,10 +677,12 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
           <term>Prototypes</term>
 
           <listitem>
-            <synopsis>vsip_scalar_<replaceable>f</replaceable> *<emphasis
-                role="bold">vsip_dda_cptr_as_interleaved_<replaceable>f</replaceable></emphasis>(vsip_dda_cdata_<replaceable>f</replaceable> *data);
+            <synopsis>vsip_scalar_<replaceable>i</replaceable> *<emphasis
+                role="bold">vsip_dda_c<replaceable>k</replaceable>ptr_as_interleaved_<replaceable>i</replaceable></emphasis>(vsip_dda_c<replaceable>k</replaceable>data_<replaceable>i</replaceable> *data);
 
-<remark>// TODO: Define additional prototypes.</remark></synopsis>
+vsip_scalar_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>ptr_as_interleaved_<replaceable>f</replaceable></emphasis>(vsip_dda_c<replaceable>k</replaceable>data_<replaceable>f</replaceable> *data);
+
+</synopsis>
           </listitem>
         </varlistentry>
 
@@ -549,7 +695,7 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
                 <term>data</term>
 
                 <listitem>
-                  <para>This argument provides the proxy object whose raw
+                  <para>This argument provides the data object whose raw
                   pointer will be returned.</para>
                 </listitem>
               </varlistentry>
@@ -582,7 +728,7 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
 
             <itemizedlist>
               <listitem>
-                <para>The proxy object is not valid, or</para>
+                <para>The data object is not valid, or</para>
               </listitem>
 
               <listitem>
@@ -622,7 +768,7 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
     </section>
 
     <section>
-      <title><function>vsip_dda_cptr_as_split_<replaceable>p</replaceable></function></title>
+      <title>vsip_dda_c<function><replaceable>k</replaceable></function>ptr_as_split_<function><replaceable>p</replaceable></function></title>
 
       <para>This function gets the raw complex pointer for DDA.</para>
 
@@ -639,11 +785,15 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
           <term>Prototypes</term>
 
           <listitem>
-            <synopsis>int <emphasis role="bold">vsip_dda_cptr_as_split_<replaceable>f</replaceable></emphasis>(vsip_dda_cdata_<replaceable>f</replaceable> *data,
-                             vsip_scalar_<replaceable>f</replaceable> **r,
-                             vsip_scalar_<replaceable>f</replaceable> **i);
+            <synopsis>int <emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>ptr_as_split_<replaceable>i</replaceable></emphasis>(vsip_dda_c<replaceable>k</replaceable>data_<replaceable>i</replaceable> *data,
+                              vsip_scalar_<replaceable>i</replaceable> **r,
+                              vsip_scalar_<replaceable>i</replaceable> **i);
 
-<remark>// TODO: Define additional prototypes.</remark></synopsis>
+int <emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>ptr_as_split_<replaceable>f</replaceable></emphasis>(vsip_dda_c<replaceable>k</replaceable>data_<replaceable>f</replaceable> *data,
+                              vsip_scalar_<replaceable>f</replaceable> **r,
+                              vsip_scalar_<replaceable>f</replaceable> **i);
+
+</synopsis>
           </listitem>
         </varlistentry>
 
@@ -656,7 +806,7 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
                 <term>data</term>
 
                 <listitem>
-                  <para>This argument provides the proxy object whose raw
+                  <para>This argument provides the data object whose raw
                   pointer will be returned.</para>
                 </listitem>
               </varlistentry>
@@ -708,7 +858,7 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
 
             <itemizedlist>
               <listitem>
-                <para>The proxy object is not valid, or</para>
+                <para>The data object is not valid, or</para>
               </listitem>
 
               <listitem>
@@ -748,9 +898,9 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
     </section>
 
     <section>
-      <title><function>vsip_dda_<replaceable>d</replaceable>datacreate_<replaceable>p</replaceable></function></title>
+      <title>vsip_dda_<function><replaceable>dk</replaceable></function>datacreate_<function><replaceable>p</replaceable></function></title>
 
-      <para>This function creates a DDA proxy object.</para>
+      <para>This function creates a DDA data object.</para>
 
       <variablelist>
         <varlistentry>
@@ -766,15 +916,15 @@ int <emphasis role="bold">vsip_dda_ccost_<replaceable>f</replaceable></emphasis>
 
           <listitem>
             <synopsis>vsip_dda_data_<replaceable>f</replaceable> *<emphasis
-                role="bold">vsip_dda_datacreate_<replaceable>f</replaceable></emphasis>(vsip_block_<replaceable>f</replaceable> *block,
-                                       vsip_datalayout *layout,
-                                       vsip_dda_sync_policy sync_policy,
-                                       vsip_scalar_<replaceable>f</replaceable> *buffer);
+                role="bold">vsip_dda_<replaceable>k</replaceable>datacreate_<replaceable>f</replaceable></emphasis>(vsip_<replaceable>k</replaceable>view_<replaceable>f</replaceable> *view,
+                                        vsip_datalayout *layout,
+                                        vsip_dda_sync_policy sync_policy,
+                                        vsip_scalar_<replaceable>f</replaceable> *buffer);
 
-vsip_dda_cdata_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_cdatacreate_<replaceable>f</replaceable></emphasis>(vsip_cblock_<replaceable>f</replaceable> *block,
-                                         vsip_cdatalayout *layout,
-                                         vsip_dda_sync_policy sync_policy,
-                                         vsip_scalar_<replaceable>f</replaceable> *buffer);
+vsip_dda_cdata_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>datacreate_<replaceable>f</replaceable></emphasis>(vsip_c<replaceable>k</replaceable>view_<replaceable>f</replaceable> *view,
+                                          vsip_cdatalayout *layout,
+                                          vsip_dda_sync_policy sync_policy,
+                                          vsip_scalar_<replaceable>f</replaceable> *buffer);
 
 <remark>// TODO: Define additional prototypes.</remark></synopsis>
           </listitem>
@@ -786,11 +936,11 @@ vsip_dda_cdata_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_cdat
           <listitem>
             <variablelist>
               <varlistentry>
-                <term>block</term>
+                <term>view</term>
 
                 <listitem>
-                  <para>This argument provides the block for which the DDA
-                  proxy object will be created.</para>
+                  <para>This argument provides the view for which the data
+                  object will be created.</para>
                 </listitem>
               </varlistentry>
 
@@ -799,9 +949,9 @@ vsip_dda_cdata_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_cdat
 
                 <listitem>
                   <para>This argument provides the layout attributes to use
-                  for the proxy object. Null layout attributes indicate that
-                  the function should use the block's layout to create the
-                  proxy object.</para>
+                  for the data object. Null layout attributes indicate that
+                  the function should use the view's layout to create the data
+                  object.</para>
                 </listitem>
               </varlistentry>
 
@@ -810,7 +960,7 @@ vsip_dda_cdata_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_cdat
 
                 <listitem>
                   <para>This argument provides the synchronization policy to
-                  use for the proxy object.</para>
+                  use for the data object.</para>
                 </listitem>
               </varlistentry>
 
@@ -821,9 +971,9 @@ vsip_dda_cdata_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_cdat
                   <para>This argument provides pre-allocated user space memory
                   for use by the implementation as the DDA buffer; this memory
                   must be at least as big as the size reported by
-                  <function>vsip_dda_<replaceable>d</replaceable>required_buffer_size_<replaceable>p</replaceable>()</function>.
+                  <function>vsip_dda_<replaceable>dk</replaceable>required_buffer_size_<replaceable>p</replaceable>()</function>.
                   If null is provided, a VSIPL space DDA buffer will be used,
-                  or direct access to the block memory will be provided, as
+                  or direct access to the view memory will be provided, as
                   determined by the implementation and the synchronization
                   policy.</para>
                 </listitem>
@@ -836,11 +986,10 @@ vsip_dda_cdata_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_cdat
           <term>Return Value</term>
 
           <listitem>
-            <para>This function returns a proxy object for the block, or null
-            on failure. If the <constant>VSIP_DDA_SYNC_POLICY_IN</constant>
-            flag is set in the synchronization policy, the associated DDA
-            buffer, if any, will have been synchronized from the block
-            memory.</para>
+            <para>This function returns a data object for the view, or null on
+            failure. If the <constant>VSIP_DDA_SYNC_POLICY_IN</constant> flag
+            is set in the synchronization policy, the associated DDA buffer,
+            if any, will have been synchronized from the view memory.</para>
           </listitem>
         </varlistentry>
 
@@ -860,7 +1009,7 @@ vsip_dda_cdata_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_cdat
 
             <itemizedlist>
               <listitem>
-                <para>The block object is not valid, or</para>
+                <para>The view object is not valid, or</para>
               </listitem>
 
               <listitem>
@@ -870,7 +1019,7 @@ vsip_dda_cdata_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_cdat
 
             <para>The behavior of this function is undefined if the buffer is
             not at least as big as the size reported by
-            <function>vsip_dda_<replaceable>d</replaceable>required_buffer_size_<replaceable>p</replaceable>()</function>.</para>
+            <function>vsip_dda_<replaceable>dk</replaceable>required_buffer_size_<replaceable>p</replaceable>()</function>.</para>
           </listitem>
         </varlistentry>
 
@@ -902,9 +1051,9 @@ vsip_dda_cdata_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_cdat
     </section>
 
     <section>
-      <title><function>vsip_dda_<replaceable>d</replaceable>datadestroy_<replaceable>p</replaceable></function></title>
+      <title>vsip_dda_<function><replaceable>dk</replaceable></function>datadestroy_<function><replaceable>p</replaceable></function></title>
 
-      <para>This function destroys a DDA proxy object.</para>
+      <para>This function destroys a DDA data object.</para>
 
       <variablelist>
         <varlistentry>
@@ -919,9 +1068,9 @@ vsip_dda_cdata_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_cdat
           <term>Prototypes</term>
 
           <listitem>
-            <synopsis>int <emphasis role="bold">vsip_dda_datadestroy_<replaceable>f</replaceable></emphasis>(vsip_dda_data_<replaceable>f</replaceable> *data);
+            <synopsis>int <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>datadestroy_<replaceable>f</replaceable></emphasis>(vsip_dda_<replaceable>k</replaceable>data_<replaceable>f</replaceable> *data);
 
-int <emphasis role="bold">vsip_dda_cdatadestroy_<replaceable>f</replaceable></emphasis>(vsip_dda_cdata_<replaceable>f</replaceable> *data);
+int <emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>datadestroy_<replaceable>f</replaceable></emphasis>(vsip_dda_c<replaceable>k</replaceable>data_<replaceable>f</replaceable> *data);
 
 <remark>// TODO: Define additional prototypes.</remark></synopsis>
           </listitem>
@@ -936,7 +1085,7 @@ int <emphasis role="bold">vsip_dda_cdatadestroy_<replaceable>f</replaceable></em
                 <term>data</term>
 
                 <listitem>
-                  <para>This argument provides the proxy object to
+                  <para>This argument provides the data object to
                   destroy</para>
                 </listitem>
               </varlistentry>
@@ -951,7 +1100,7 @@ int <emphasis role="bold">vsip_dda_cdatadestroy_<replaceable>f</replaceable></em
             <para>This function returns zero on success and a non-zero value
             on failure. If the <constant>VSIP_DDA_SYNC_POLICY_OUT</constant>
             flag is set in the synchronization policy, the associated DDA
-            buffer, if any, will have been synchronized to the block
+            buffer, if any, will have been synchronized to the view
             memory.</para>
           </listitem>
         </varlistentry>
@@ -969,7 +1118,7 @@ int <emphasis role="bold">vsip_dda_cdatadestroy_<replaceable>f</replaceable></em
 
           <listitem>
             <para>This function will have no effect and return a non-zero
-            value if the proxy object is not valid.</para>
+            value if the data object is not valid.</para>
           </listitem>
         </varlistentry>
 
@@ -1001,9 +1150,9 @@ int <emphasis role="bold">vsip_dda_cdatadestroy_<replaceable>f</replaceable></em
     </section>
 
     <section>
-      <title><function>vsip_dda_<replaceable>d</replaceable>datagetattrib_<replaceable>p</replaceable></function></title>
+      <title>vsip_dda_<function><replaceable>dk</replaceable></function>datagetattrib_<function><replaceable>p</replaceable></function></title>
 
-      <para>This function gets the attributes of a proxy object.</para>
+      <para>This function gets the attributes of a data object.</para>
 
       <variablelist>
         <varlistentry>
@@ -1018,11 +1167,11 @@ int <emphasis role="bold">vsip_dda_cdatadestroy_<replaceable>f</replaceable></em
           <term>Prototypes</term>
 
           <listitem>
-            <synopsis>void <emphasis role="bold">vsip_dda_datagetattrib_<replaceable>f</replaceable></emphasis>(vsip_dda_data_<replaceable>f</replaceable> *data,
-                              vsip_dda_dataattr *attrib);
+            <synopsis>void <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>datagetattrib_<replaceable>f</replaceable></emphasis>(vsip_dda_<replaceable>k</replaceable>data_<replaceable>f</replaceable> *data,
+                               vsip_dda_<replaceable>k</replaceable>dataattr_<replaceable>f</replaceable> *attrib);
 
-void <emphasis role="bold">vsip_dda_cdatagetattrib_<replaceable>f</replaceable></emphasis>(vsip_dda_cdata_<replaceable>f</replaceable> *data,
-                               vsip_dda_dataattr *attrib);
+void <emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>datagetattrib_<replaceable>f</replaceable></emphasis>(vsip_dda_c<replaceable>k</replaceable>data_<replaceable>f</replaceable> *data,
+                                vsip_dda_c<replaceable>k</replaceable>dataattr_<replaceable>f</replaceable> *attrib);
 
 <remark>// TODO: Define additional prototypes.</remark></synopsis>
           </listitem>
@@ -1037,7 +1186,7 @@ void <emphasis role="bold">vsip_dda_cdatagetattrib_<replaceable>f</replaceable><
                 <term>data</term>
 
                 <listitem>
-                  <para>This argument provides the proxy object.</para>
+                  <para>This argument provides the data object.</para>
                 </listitem>
               </varlistentry>
 
@@ -1045,7 +1194,7 @@ void <emphasis role="bold">vsip_dda_cdatagetattrib_<replaceable>f</replaceable><
                 <term>attrib</term>
 
                 <listitem>
-                  <para>This argument contains the proxy object
+                  <para>This argument contains the data object
                   attributes.</para>
                 </listitem>
               </varlistentry>
@@ -1058,7 +1207,7 @@ void <emphasis role="bold">vsip_dda_cdatagetattrib_<replaceable>f</replaceable><
 
           <listitem>
             <para>This function populates the attributes parameter with the
-            values associated with the proxy object on successful completion,
+            values associated with the data object on successful completion,
             and makes no changes on failure.</para>
           </listitem>
         </varlistentry>
@@ -1076,7 +1225,7 @@ void <emphasis role="bold">vsip_dda_cdatagetattrib_<replaceable>f</replaceable><
 
           <listitem>
             <para>This function will not update the attributes parameter if
-            the proxy object is not valid or if the attributes parameter is
+            the data object is not valid or if the attributes parameter is
             null.</para>
           </listitem>
         </varlistentry>
@@ -1109,7 +1258,7 @@ void <emphasis role="bold">vsip_dda_cdatagetattrib_<replaceable>f</replaceable><
     </section>
 
     <section>
-      <title><function>vsip_dda_ptr_<replaceable>p</replaceable></function></title>
+      <title>vsip_dda_<function><replaceable>k</replaceable></function>ptr_<function><replaceable>p</replaceable></function></title>
 
       <para>This function gets the pointer for DDA.</para>
 
@@ -1127,7 +1276,7 @@ void <emphasis role="bold">vsip_dda_cdatagetattrib_<replaceable>f</replaceable><
 
           <listitem>
             <synopsis>vsip_scalar_<replaceable>f</replaceable> *<emphasis
-                role="bold">vsip_dda_ptr_<replaceable>f</replaceable></emphasis>(vsip_dda_data_<replaceable>f</replaceable> *data);
+                role="bold">vsip_dda_<replaceable>k</replaceable>ptr_<replaceable>f</replaceable></emphasis>(vsip_dda_<replaceable>k</replaceable>data_<replaceable>f</replaceable> *data);
 
 <remark>// TODO: Define additional prototypes.</remark></synopsis>
           </listitem>
@@ -1142,7 +1291,7 @@ void <emphasis role="bold">vsip_dda_cdatagetattrib_<replaceable>f</replaceable><
                 <term>data</term>
 
                 <listitem>
-                  <para>This argument provides the proxy object whose DDA
+                  <para>This argument provides the data object whose DDA
                   pointer will be returned.</para>
                 </listitem>
               </varlistentry>
@@ -1172,7 +1321,7 @@ void <emphasis role="bold">vsip_dda_cdatagetattrib_<replaceable>f</replaceable><
 
           <listitem>
             <para>This function will have no effect and return null if the
-            proxy object is not valid.</para>
+            data object is not valid.</para>
           </listitem>
         </varlistentry>
 
@@ -1204,7 +1353,7 @@ void <emphasis role="bold">vsip_dda_cdatagetattrib_<replaceable>f</replaceable><
     </section>
 
     <section>
-      <title><function>vsip_dda_<replaceable>d</replaceable>required_buffer_size_<replaceable>p</replaceable></function></title>
+      <title>vsip_dda_<function><replaceable>dk</replaceable></function>required_buffer_size_<function><replaceable>p</replaceable></function></title>
 
       <para>This function gets the size of the buffer required for direct data
       access.</para>
@@ -1223,13 +1372,13 @@ void <emphasis role="bold">vsip_dda_cdatagetattrib_<replaceable>f</replaceable><
 
           <listitem>
             <synopsis>
-vsip_length <emphasis role="bold">vsip_dda_required_buffer_size_<replaceable>f</replaceable></emphasis>(vsip_block_<replaceable>f</replaceable> *block,
-                                            vsip_datalayout *layout,
-                                            vsip_dda_sync_policy sync_policy);
-
-vsip_length <emphasis role="bold">vsip_dda_crequired_buffer_size_<replaceable>f</replaceable></emphasis>(vsip_cblock_<replaceable>f</replaceable> *block,
-                                             vsip_cdatalayout *layout,
+vsip_length <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>required_buffer_size_<replaceable>f</replaceable></emphasis>(vsip_<replaceable>k</replaceable>view_<replaceable>f</replaceable> *view,
+                                             vsip_datalayout *layout,
                                              vsip_dda_sync_policy sync_policy);
+
+vsip_length <emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>required_buffer_size_<replaceable>f</replaceable></emphasis>(vsip_c<replaceable>k</replaceable>view_<replaceable>f</replaceable> *view,
+                                              vsip_cdatalayout *layout,
+                                              vsip_dda_sync_policy sync_policy);
 
 <remark>// TODO: Define additional prototypes.</remark></synopsis>
           </listitem>
@@ -1241,10 +1390,10 @@ vsip_length <emphasis role="bold">vsip_dda_crequired_buffer_size_<replaceable>f<
           <listitem>
             <variablelist>
               <varlistentry>
-                <term>block</term>
+                <term>view</term>
 
                 <listitem>
-                  <para>This argument provides the block to use when computing
+                  <para>This argument provides the view to use when computing
                   the DDA buffer size.</para>
                 </listitem>
               </varlistentry>
@@ -1255,7 +1404,7 @@ vsip_length <emphasis role="bold">vsip_dda_crequired_buffer_size_<replaceable>f<
                 <listitem>
                   <para>This argument provides the layout attributes to use
                   when computing the DDA buffer size. Null layout attributes
-                  indicate that the function should use the block's layout to
+                  indicate that the function should use the view's layout to
                   compute the size.</para>
                 </listitem>
               </varlistentry>
@@ -1277,7 +1426,7 @@ vsip_length <emphasis role="bold">vsip_dda_crequired_buffer_size_<replaceable>f<
 
           <listitem>
             <para>This function returns the size of the DDA buffer required to
-            hold the block's data while it is accessed via DDA.</para>
+            hold the view's data while it is accessed via DDA.</para>
           </listitem>
         </varlistentry>
 
@@ -1297,11 +1446,11 @@ vsip_length <emphasis role="bold">vsip_dda_crequired_buffer_size_<replaceable>f<
 
             <itemizedlist>
               <listitem>
-                <para>The block object is not valid, or</para>
+                <para>The view object is not valid, or</para>
               </listitem>
 
               <listitem>
-                <para>The synchronization is not valid.</para>
+                <para>The synchronization policy is not valid.</para>
               </listitem>
             </itemizedlist>
           </listitem>
@@ -1314,8 +1463,8 @@ vsip_length <emphasis role="bold">vsip_dda_crequired_buffer_size_<replaceable>f<
             <itemizedlist>
               <listitem>
                 <para>This function will return zero if no buffer is required
-                because the implementation will provide access to the block
-                data directly (i.e. to the block memory) and not via a DDA
+                because the implementation will provide access to the view
+                data directly (i.e. to the view memory) and not via a DDA
                 buffer.</para>
               </listitem>
 
@@ -1356,10 +1505,10 @@ vsip_length <emphasis role="bold">vsip_dda_crequired_buffer_size_<replaceable>f<
     </section>
 
     <section>
-      <title><function>vsip_dda_<replaceable>d</replaceable>sync_in_<replaceable>p</replaceable></function></title>
+      <title>vsip_dda_<function><replaceable>dk</replaceable></function>sync_in_<function><replaceable>p</replaceable></function></title>
 
-      <para>This function synchronizes the proxy object from the block memory
-      to the DDA buffer.</para>
+      <para>This function synchronizes the data object from the view memory to
+      the DDA buffer.</para>
 
       <variablelist>
         <varlistentry>
@@ -1374,9 +1523,9 @@ vsip_length <emphasis role="bold">vsip_dda_crequired_buffer_size_<replaceable>f<
           <term>Prototypes</term>
 
           <listitem>
-            <synopsis>int <emphasis role="bold">vsip_dda_sync_in_<replaceable>f</replaceable></emphasis>(vsip_dda_data_<replaceable>f</replaceable> *data);
+            <synopsis>int <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>sync_in_<replaceable>f</replaceable></emphasis>(vsip_dda_<replaceable>k</replaceable>data_<replaceable>f</replaceable> *data);
 
-int <emphasis role="bold">vsip_dda_csync_in_<replaceable>f</replaceable></emphasis>(vsip_dda_cdata_<replaceable>f</replaceable> *data);
+int <emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>sync_in_<replaceable>f</replaceable></emphasis>(vsip_dda_c<replaceable>k</replaceable>data_<replaceable>f</replaceable> *data);
 
 <remark>// TODO: Define additional prototypes.</remark></synopsis>
           </listitem>
@@ -1391,7 +1540,7 @@ int <emphasis role="bold">vsip_dda_csync_in_<replaceable>f</replaceable></emphas
                 <term>data</term>
 
                 <listitem>
-                  <para>This argument provides the proxy object to
+                  <para>This argument provides the data object to
                   synchronize.</para>
                 </listitem>
               </varlistentry>
@@ -1404,7 +1553,7 @@ int <emphasis role="bold">vsip_dda_csync_in_<replaceable>f</replaceable></emphas
 
           <listitem>
             <para>This function returns zero on successful synchronization of
-            the proxy object and a non-zero value on failure.</para>
+            the data object and a non-zero value on failure.</para>
           </listitem>
         </varlistentry>
 
@@ -1423,14 +1572,14 @@ int <emphasis role="bold">vsip_dda_csync_in_<replaceable>f</replaceable></emphas
             <itemizedlist>
               <listitem>
                 <para>This function will have no effect and return a non-zero
-                value if the proxy object is not valid.</para>
+                value if the data object is not valid.</para>
               </listitem>
 
               <listitem>
                 <para>This function will have no effect and return a non-zero
                 value if the <constant>VSIP_DDA_SYNC_POLICY_IN</constant> flag
                 is not set in the synchronization policy associated with the
-                proxy object (i.e. the proxy object uses a write-only
+                data object (i.e. the data object uses a write-only
                 synchronization policy).</para>
               </listitem>
             </itemizedlist>
@@ -1444,9 +1593,9 @@ int <emphasis role="bold">vsip_dda_csync_in_<replaceable>f</replaceable></emphas
             <itemizedlist>
               <listitem>
                 <para>This function will have no effect and return zero if the
-                implementation will provide direct access to the block memory,
+                implementation will provide direct access to the view memory,
                 as determined by the implementation and by the synchronization
-                policy associated with the proxy object, as there is no DDA
+                policy associated with the data object, as there is no DDA
                 buffer to synchronize.</para>
               </listitem>
             </itemizedlist>
@@ -1473,10 +1622,10 @@ int <emphasis role="bold">vsip_dda_csync_in_<replaceable>f</replaceable></emphas
     </section>
 
     <section>
-      <title><function>vsip_dda_<replaceable>d</replaceable>sync_out_<replaceable>p</replaceable></function></title>
+      <title>vsip_dda_<function><replaceable>dk</replaceable></function>sync_out_<function><replaceable>p</replaceable></function></title>
 
-      <para>This function synchronizes the proxy object from the DDA buffer to
-      the block memory.</para>
+      <para>This function synchronizes the data object from the DDA buffer to
+      the view memory.</para>
 
       <variablelist>
         <varlistentry>
@@ -1491,9 +1640,9 @@ int <emphasis role="bold">vsip_dda_csync_in_<replaceable>f</replaceable></emphas
           <term>Prototypes</term>
 
           <listitem>
-            <synopsis>int <emphasis role="bold">vsip_dda_sync_out_<replaceable>f</replaceable></emphasis>(vsip_dda_data_<replaceable>f</replaceable> *data);
+            <synopsis>int <emphasis role="bold">vsip_dda_<replaceable>k</replaceable>sync_out_<replaceable>f</replaceable></emphasis>(vsip_dda_<replaceable>k</replaceable>data_<replaceable>f</replaceable> *data);
 
-int <emphasis role="bold">vsip_dda_csync_out_<replaceable>f</replaceable></emphasis>(vsip_dda_cdata_<replaceable>f</replaceable> *data);
+int <emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>sync_out_<replaceable>f</replaceable></emphasis>(vsip_dda_c<replaceable>k</replaceable>data_<replaceable>f</replaceable> *data);
 
 <remark>// TODO: Define additional prototypes.</remark></synopsis>
           </listitem>
@@ -1508,7 +1657,7 @@ int <emphasis role="bold">vsip_dda_csync_out_<replaceable>f</replaceable></empha
                 <term>data</term>
 
                 <listitem>
-                  <para>This argument provides the proxy object to
+                  <para>This argument provides the data object to
                   synchronize.</para>
                 </listitem>
               </varlistentry>
@@ -1521,7 +1670,7 @@ int <emphasis role="bold">vsip_dda_csync_out_<replaceable>f</replaceable></empha
 
           <listitem>
             <para>This function returns zero on successful synchronization of
-            the proxy object, and a non-zero value on failure.</para>
+            the data object, and a non-zero value on failure.</para>
           </listitem>
         </varlistentry>
 
@@ -1540,14 +1689,14 @@ int <emphasis role="bold">vsip_dda_csync_out_<replaceable>f</replaceable></empha
             <itemizedlist>
               <listitem>
                 <para>This function will have no effect and return a non-zero
-                value if the proxy object is not valid.</para>
+                value if the data object is not valid.</para>
               </listitem>
 
               <listitem>
                 <para>This function will have no effect and return a non-zero
                 value if the <constant>VSIP_DDA_SYNC_POLICY_OUT</constant>
                 flag is not set in the synchronization policy associated with
-                the proxy object (i.e. the proxy object uses a read-only
+                the data object (i.e. the data object uses a read-only
                 synchronization policy).</para>
               </listitem>
             </itemizedlist>
@@ -1561,9 +1710,9 @@ int <emphasis role="bold">vsip_dda_csync_out_<replaceable>f</replaceable></empha
             <itemizedlist>
               <listitem>
                 <para>This function will have no effect and return zero if the
-                implementation will provide direct access to the block memory,
+                implementation will provide direct access to the view memory,
                 as determined by the implementation and by the synchronization
-                policy associated with the proxy object, as there is no DDA
+                policy associated with the data object, as there is no DDA
                 buffer to synchronize from.</para>
               </listitem>
             </itemizedlist>

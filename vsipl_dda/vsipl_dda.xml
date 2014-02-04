@@ -6,9 +6,9 @@
   <info>
     <title>VSIPL DDA Additions [DRAFT]</title>
 
-    <subtitle>Version 0.9</subtitle>
+    <subtitle>Version 0.10</subtitle>
 
-    <titleabbrev>VSIPL DDA Additions 0.9 [DRAFT]</titleabbrev>
+    <titleabbrev>VSIPL DDA Additions 0.10 [DRAFT]</titleabbrev>
 
     <pubdate>
       <?dbtimestamp format="Y-m-d"?>
@@ -93,6 +93,17 @@
         block length to the proxy object attributes in place of the view
         attributes; Removed the abstract pointer type and simplified the
         complex pointer accessor API accordingly.</revremark>
+      </revision>
+
+      <revision>
+        <revnumber>0.10</revnumber>
+
+        <date>4 Feb 2014</date>
+
+        <revremark>Change DDA objects to be bulit on top of view instead of
+        blocks; Added a comment for discussion RE creation of the tuple type;
+        Added a replaceable character "k" to type and function definitions to
+        account for the associated view type.</revremark>
       </revision>
     </revhistory>
   </preface>
