@@ -45,6 +45,14 @@
       format indicates that the complex data is held in an array of type
       <function><replaceable>p</replaceable>[]</function>, width real and
       imaginary values alternating.</para>
+
+      <remark>Note that, as defined, the vsip_storage_format type does not
+      require backwards compatibility with the vsip_cmplx_mem type. In
+      particular, VSIP_CMPLX_INTERLEAVED = 0, VSIPL_CMPLX_SPLIT = 1 and
+      VSIPL_CMPLX_NONE = 2 in version 1.4 of the spec, but are not given
+      specific values in this version. To echo Ken's comment from last week:
+      "Do we need to specify an exact value for each of the options in this
+      enumerated type?"</remark>
     </section>
 
     <section>
@@ -67,6 +75,9 @@
   VSIP_CMPLX_NONE = VSIP_STORAGE_FORMAT_ARRAY,
   VSIP_CMPLX_DEPENDENT = VSIP_STORAGE_FORMAT_ANY
 } <emphasis role="bold">vsip_cmplx_mem</emphasis>;</synopsis>
+
+      <remark>Are VSIP_CMPLX_NONE and VSIP_CMPLX_DEPENDENT set
+      correctly?</remark>
     </section>
 
     <section>
@@ -90,10 +101,12 @@
   VSIP_PACK_TYPE_ALIGNED_512,
   VSIP_PACK_TYPE_ALIGNED_1024
 } <emphasis role="bold">vsip_pack_type</emphasis>;</synopsis>
+
+      <remark>Do we need more of an explanation here?</remark>
     </section>
 
     <section>
-      <title>Dimension Order (Tuple)</title>
+      <title>Dimension Order</title>
 
       <para>The dimension order, or <emphasis>tuple</emphasis>, type is used
       to specify the order in which logical dimensions are used to address
@@ -105,12 +118,10 @@
 
 typedef struct
 {
-  vsip_dim impl_dim0;
-  vsip_dim impl_dim1;
-  vsip_dim impl_dim2;
-} <emphasis role="bold">vsip_tuple</emphasis>;
-
-typedef vsip_tuple <emphasis role="bold">vsip_dim_order</emphasis>;
+  vsip_dim dim0;
+  vsip_dim dim1;
+  vsip_dim dim2;
+} <emphasis role="bold">vsip_dim_order</emphasis>;
 
 vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_VROW_MAJOR</emphasis> = {0, 1, 2};
 vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_MROW_MAJOR</emphasis> = {0, 1, 2};
@@ -120,10 +131,12 @@ vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_VCOL_MAJOR</emphasis> 
 vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_MCOL_MAJOR</emphasis> = {1, 0, 2};
 vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_TCOL_MAJOR</emphasis> = {2, 1, 0};</synopsis>
 
-      <remark>VSIPL already defines a tuple type, but not generically. In
-      particular, the tensor index type is defined almost identically to this
-      tuple type here. That of course begs the question as to whether or not
-      we are justified in defining a new type here.</remark>
+      <remark>Ideally we would replace vsip_major and vsip_tmajor with this
+      type after deprecated them; however, they are not defined similarly
+      enough to make this possible. As an alternative, I suggest that we
+      deprecate the old types and the old functions that use them, and then
+      define new functions that use the new vsip_dim_order type
+      instead.</remark>
     </section>
 
     <section>

@@ -6,9 +6,9 @@
   <info>
     <title>VSIPL DDA Additions [DRAFT]</title>
 
-    <subtitle>Version 0.10</subtitle>
+    <subtitle>Version 0.11</subtitle>
 
-    <titleabbrev>VSIPL DDA Additions 0.10 [DRAFT]</titleabbrev>
+    <titleabbrev>VSIPL DDA Additions 0.11 [DRAFT]</titleabbrev>
 
     <pubdate>
       <?dbtimestamp format="Y-m-d"?>
@@ -104,6 +104,20 @@
         blocks; Added a comment for discussion RE creation of the tuple type;
         Added a replaceable character "k" to type and function definitions to
         account for the associated view type.</revremark>
+      </revision>
+
+      <revision>
+        <revnumber>0.11</revnumber>
+
+        <date>5 Feb 2014</date>
+
+        <revremark>Changed the name of the vsip_tuple type to vsip_dim_order;
+        Added comments for consideration to the vsip_storage_format and
+        vsip_cmplx_mem type definitions; Added a comment for consideration to
+        the vsip_dim_order type definition; Added a table to the
+        vsip_sync_policy type explanation to summarize the data flows and when
+        to use each policy; Added a comment for consideration to the
+        vsip_pack_type section.</revremark>
       </revision>
     </revhistory>
   </preface>

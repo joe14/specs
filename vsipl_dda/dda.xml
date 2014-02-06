@@ -137,6 +137,48 @@ vsip_dda_sync_policy const <emphasis role="bold">VSIP_DDA_SYNC_POLICY_COPY</emph
       that the view should be copied into separate a DDA buffer, even if the
       implementation would otherwise provide a direct access to the view
       memory.</para>
+
+      <para>The table below summarizes when to use each synchronization
+      policy.</para>
+
+      <informaltable>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Data Flow</entry>
+
+              <entry>Synchronization Policy</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>(view memory <emphasis>or</emphasis> DDA buffer) as the
+              <emphasis role="bold">input</emphasis> to an external
+              operation</entry>
+
+              <entry><function>VSIP_DDA_SYNC_POLICY_IN</function></entry>
+            </row>
+
+            <row>
+              <entry>(view memory <emphasis>or</emphasis> DDA buffer) as the
+              <emphasis role="bold">output</emphasis> from an external
+              operation</entry>
+
+              <entry><function>VSIP_DDA_SYNC_POLICY_OUT</function></entry>
+            </row>
+
+            <row>
+              <entry>(view memory <emphasis>or</emphasis> DDA buffer) as the
+              <emphasis role="bold">input</emphasis> to
+              <emphasis>and</emphasis> <emphasis role="bold">output</emphasis>
+              from an external operation</entry>
+
+              <entry><function>VSIP_DDA_SYNC_POLICY_INOUT</function></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
     </section>
 
     <section>
