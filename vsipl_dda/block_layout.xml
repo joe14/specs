@@ -23,9 +23,9 @@
       <synopsis>typdef enum
 {
   VSIP_STORAGE_FORMAT_ANY,
-  VSIP_STORAGE_FORMAT_ARRAY,
-  VSIP_STORAGE_FORMAT_SPLIT_COMPLEX,
-  VSIP_STORAGE_FORMAT_INTERLEAVED_COMPLEX
+  VSIP_STORAGE_FORMAT_ARRAY = 2,               /* VSIP_CMPLX_NONE */
+  VSIP_STORAGE_FORMAT_SPLIT_COMPLEX = 1,       /* VSIP_CMPLX_SPLIT */
+  VSIP_STORAGE_FORMAT_INTERLEAVED_COMPLEX = 0  /* VSIP_CMPLX_INTERLEAVED */
 } <emphasis role="bold">vsip_storage_format</emphasis>;</synopsis>
 
       <para>The storage format of real-valued data is always
@@ -45,14 +45,6 @@
       format indicates that the complex data is held in an array of type
       <function><replaceable>p</replaceable>[]</function>, width real and
       imaginary values alternating.</para>
-
-      <remark>Note that, as defined, the vsip_storage_format type does not
-      require backwards compatibility with the vsip_cmplx_mem type. In
-      particular, VSIP_CMPLX_INTERLEAVED = 0, VSIPL_CMPLX_SPLIT = 1 and
-      VSIPL_CMPLX_NONE = 2 in version 1.4 of the spec, but are not given
-      specific values in this version. To echo Ken's comment from last week:
-      "Do we need to specify an exact value for each of the options in this
-      enumerated type?"</remark>
     </section>
 
     <section>
@@ -70,14 +62,15 @@
 
       <synopsis>typedef enum 
 {
-  VSIP_CMPLX_INTERLEAVED = VSIP_STORAGE_FORMAT_INTERLEAVED_COMPLEX,
-  VSIP_CMPLX_SPLIT = VSIP_STORAGE_FORMAT_SPLIT_COMPLEX,
-  VSIP_CMPLX_NONE = VSIP_STORAGE_FORMAT_ARRAY,
-  VSIP_CMPLX_DEPENDENT = VSIP_STORAGE_FORMAT_ANY
+  VSIP_CMPLX_INTERLEAVED = 0, /* Interleaved */
+  VSIP_CMPLX_SPLIT = 1,       /* Split, separate real and imaginary */
+  VSIP_CMPLX_NONE = 2         /* No preferred storage layout */
 } <emphasis role="bold">vsip_cmplx_mem</emphasis>;</synopsis>
 
-      <remark>Are VSIP_CMPLX_NONE and VSIP_CMPLX_DEPENDENT set
-      correctly?</remark>
+      <remark>NEW RTF ISSUE: Replace vsip_cmplx_mem with vsip_storage_format
+      in function and type definitions, remove the vsip_cmplx_mem type, and
+      remove the value specifications from the vsip_storage_format type
+      definition</remark>
     </section>
 
     <section>
@@ -102,17 +95,16 @@
   VSIP_PACK_TYPE_ALIGNED_1024
 } <emphasis role="bold">vsip_pack_type</emphasis>;</synopsis>
 
-      <remark>Do we need more of an explanation here?</remark>
+      <remark>NEW RTF ISSUE: Add text to describe the vsip_pack_type</remark>
     </section>
 
     <section>
       <title>Dimension Order</title>
 
-      <para>The dimension order, or <emphasis>tuple</emphasis>, type is used
-      to specify the order in which logical dimensions are used to address
-      memory. Logical dimensions are numbered from major to minor, starting
-      with zero. Dimensions not relevant to the data object are
-      ignored.</para>
+      <para>The dimension order type is used to specify the order in which
+      logical dimensions are used to address memory. Logical dimensions are
+      numbered from major to minor, starting with zero. Dimensions not
+      relevant to the data object are ignored.</para>
 
       <synopsis>typedef vsip_scalar_vi vsip_dim;
 
@@ -131,12 +123,8 @@ vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_VCOL_MAJOR</emphasis> 
 vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_MCOL_MAJOR</emphasis> = {1, 0, 2};
 vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_TCOL_MAJOR</emphasis> = {2, 1, 0};</synopsis>
 
-      <remark>Ideally we would replace vsip_major and vsip_tmajor with this
-      type after deprecated them; however, they are not defined similarly
-      enough to make this possible. As an alternative, I suggest that we
-      deprecate the old types and the old functions that use them, and then
-      define new functions that use the new vsip_dim_order type
-      instead.</remark>
+      <remark>NEW RTF ISSUE: Replace the vsip_major and vsip_tmajor types with
+      the vsip_dim_order type where possible and appropriate</remark>
     </section>
 
     <section>
