@@ -671,7 +671,7 @@ vsip_cscalar_<emphasis><replaceable>f</replaceable></emphasis> *<emphasis
       </variablelist>
     </section>
 
-    <section>
+    <section xml:id="vsip_dda_ckptr_as_interleaved_p">
       <title>vsip_dda_c<function><replaceable>k</replaceable></function>ptr_as_interleaved_<function><replaceable>p</replaceable></function></title>
 
       <para>This function gets the raw complex pointer for DDA.</para>
@@ -927,42 +927,47 @@ int <emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>ptr_as_split_<re
           <term>Prototypes</term>
 
           <listitem>
-            <synopsis>vsip_dda_data_vi *<emphasis role="bold">vsip_dda_<replaceable>k</replaceable>datacreate_vi</emphasis>(vsip_<replaceable>k</replaceable>view_vi *view,
+            <synopsis>vsip_dda_<replaceable>k</replaceable>data_vi *<emphasis
+                role="bold">vsip_dda_<replaceable>k</replaceable>datacreate_vi</emphasis>(vsip_<replaceable>k</replaceable>view_vi *view,
                                           vsip_datalayout *layout,
                                           vsip_dda_sync_policy sync_policy,
                                           vsip_scalar_vi *buffer);
 
-vsip_dda_data_mi *<emphasis role="bold">vsip_dda_<replaceable>k</replaceable>datacreate_mi</emphasis>(vsip_<replaceable>k</replaceable>view_mi *view,
+vsip_dda_<replaceable>k</replaceable>data_mi *<emphasis role="bold">vsip_dda_<replaceable>k</replaceable>datacreate_mi</emphasis>(vsip_<replaceable>k</replaceable>view_mi *view,
                                           vsip_datalayout *layout,
                                           vsip_dda_sync_policy sync_policy,
                                           vsip_scalar_mi *buffer);
 
-vsip_dda_data_ti *<emphasis role="bold">vsip_dda_<replaceable>k</replaceable>datacreate_ti</emphasis>(vsip_<replaceable>k</replaceable>view_ti *view,
+vsip_dda_<replaceable>k</replaceable>data_ti *<emphasis role="bold">vsip_dda_<replaceable>k</replaceable>datacreate_ti</emphasis>(vsip_<replaceable>k</replaceable>view_ti *view,
                                           vsip_datalayout *layout,
                                           vsip_dda_sync_policy sync_policy,
                                           vsip_scalar_ti *buffer);
 
-vsip_dda_data_bl *<emphasis role="bold">vsip_dda_<replaceable>k</replaceable>datacreate_bl</emphasis>(vsip_<replaceable>k</replaceable>view_bl *view,
+vsip_dda_<replaceable>k</replaceable>data_bl *<emphasis role="bold">vsip_dda_<replaceable>k</replaceable>datacreate_bl</emphasis>(vsip_<replaceable>k</replaceable>view_bl *view,
                                           vsip_datalayout *layout,
                                           vsip_dda_sync_policy sync_policy,
                                           vsip_scalar_bl *buffer);
 
-vsip_dda_data_<replaceable>i</replaceable> *<emphasis role="bold">vsip_dda_<replaceable>k</replaceable>datacreate_<replaceable>i</replaceable></emphasis>(vsip_<replaceable>k</replaceable>view_<replaceable>i</replaceable> *view,
+vsip_dda_<replaceable>k</replaceable>data_<replaceable>i</replaceable> *<emphasis
+                role="bold">vsip_dda_<replaceable>k</replaceable>datacreate_<replaceable>i</replaceable></emphasis>(vsip_<replaceable>k</replaceable>view_<replaceable>i</replaceable> *view,
                                         vsip_datalayout *layout,
                                         vsip_dda_sync_policy sync_policy,
                                         vsip_scalar_<replaceable>i</replaceable> *buffer);
 
-vsip_dda_cdata_<replaceable>i</replaceable> *<emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>datacreate_<replaceable>i</replaceable></emphasis>(vsip_c<replaceable>k</replaceable>view_<replaceable>i</replaceable> *view,
+vsip_dda_c<replaceable>k</replaceable>data_<replaceable>i</replaceable> *<emphasis
+                role="bold">vsip_dda_c<replaceable>k</replaceable>datacreate_<replaceable>i</replaceable></emphasis>(vsip_c<replaceable>k</replaceable>view_<replaceable>i</replaceable> *view,
                                           vsip_datalayout *layout,
                                           vsip_dda_sync_policy sync_policy,
                                           vsip_scalar_<replaceable>i</replaceable> *buffer);
 
-vsip_dda_data_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_<replaceable>k</replaceable>datacreate_<replaceable>f</replaceable></emphasis>(vsip_<replaceable>k</replaceable>view_<replaceable>f</replaceable> *view,
+vsip_dda_<replaceable>k</replaceable>data_<replaceable>f</replaceable> *<emphasis
+                role="bold">vsip_dda_<replaceable>k</replaceable>datacreate_<replaceable>f</replaceable></emphasis>(vsip_<replaceable>k</replaceable>view_<replaceable>f</replaceable> *view,
                                         vsip_datalayout *layout,
                                         vsip_dda_sync_policy sync_policy,
                                         vsip_scalar_<replaceable>f</replaceable> *buffer);
 
-vsip_dda_cdata_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>datacreate_<replaceable>f</replaceable></emphasis>(vsip_c<replaceable>k</replaceable>view_<replaceable>f</replaceable> *view,
+vsip_dda_c<replaceable>k</replaceable>data_<replaceable>f</replaceable> *<emphasis
+                role="bold">vsip_dda_c<replaceable>k</replaceable>datacreate_<replaceable>f</replaceable></emphasis>(vsip_c<replaceable>k</replaceable>view_<replaceable>f</replaceable> *view,
                                           vsip_datalayout *layout,
                                           vsip_dda_sync_policy sync_policy,
                                           vsip_scalar_<replaceable>f</replaceable> *buffer);
@@ -1078,7 +1083,7 @@ vsip_dda_cdata_<replaceable>f</replaceable> *<emphasis role="bold">vsip_dda_c<re
 
           <listitem>
             <programlisting><xi:include href="examples/dda_dkdatacreate_p.c"
-                parse="text"/>            </programlisting>
+                parse="text"/></programlisting>
           </listitem>
         </varlistentry>
 
@@ -1189,7 +1194,7 @@ int <emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>datadestroy_<rep
 
           <listitem>
             <programlisting><xi:include href="examples/dda_dkdatadestroy_p.c"
-                parse="text"/>            </programlisting>
+                parse="text"/></programlisting>
           </listitem>
         </varlistentry>
 

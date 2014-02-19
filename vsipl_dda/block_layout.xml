@@ -43,7 +43,7 @@
 
       <para>A <function>VSIP_STORAGE_FORMAT_INTERLEAVED_COMPLEX</function>
       format indicates that the complex data is held in an array of type
-      <function><replaceable>p</replaceable>[]</function>, width real and
+      <function><replaceable>p</replaceable>[]</function>, with real and
       imaginary values alternating.</para>
     </section>
 

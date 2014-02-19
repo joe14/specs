@@ -6,9 +6,9 @@
   <info>
     <title>VSIPL DDA Additions [DRAFT]</title>
 
-    <subtitle>Version 0.12</subtitle>
+    <subtitle>Version 0.13</subtitle>
 
-    <titleabbrev>VSIPL DDA Additions 0.12 [DRAFT]</titleabbrev>
+    <titleabbrev>VSIPL DDA Additions 0.13 [DRAFT]</titleabbrev>
 
     <pubdate>
       <?dbtimestamp format="Y-m-d"?>
@@ -134,6 +134,17 @@
         additional type-specific function prototypes; Removed TODO statements
         from example source code files; Added TODO statements to capture
         forward-looking and out-of-scope issues for the next RTF.</revremark>
+      </revision>
+
+      <revision>
+        <revnumber>0.13</revnumber>
+
+        <date>18 Feb 2014</date>
+
+        <revremark>Fixed a bug in the return values of the
+        vsip_dda_dkdatacreate_p() function; Added examples to the
+        vsip_dda_dkcost_p(), vsip_dda_ckptr_as_array_p(), and
+        vsip_dda_ckptr_as_interleaved_p() functions.</revremark>
       </revision>
     </revhistory>
   </preface>
