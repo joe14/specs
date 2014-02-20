@@ -150,7 +150,7 @@
       <revision>
         <revnumber>0.14</revnumber>
 
-        <date>19 Feb 2014</date>
+        <date>20 Feb 2014</date>
 
         <revremark>Moved vsip_cmplx_mem back to section 2.4, along with its
         deprecation warning; Added a note to vsip_storage_format regarding how
@@ -160,10 +160,10 @@
         VSIP_STORAGE_FORMAT_ANY a value so that it would not conflict with
         VSIP_STORAGE_FORMAT_INTERLEAVED_COMPLEX; Added a note to
         vsip_dda_dkdatadestroy_p() regarding destruction of VSIPL space DDA
-        buffers; Separated the data object constructors for real and complex
-        data; Re-ordered the function sections; Collapsed the complex pointer
-        type function definitions by adding the replaceable character q;
-        Changed the word "interleaved" in function names to "inter"; Added
+        buffers; Re-ordered the function sections; Collapsed the complex
+        pointer type function definitions by adding the replaceable character
+        q; Changed the word "interleaved" in function names to "inter"; Added
+        a description of the VSIP_STORAGE_FORMAT_ANY storage format; Added
         referenences from empty examples sections to function sections that
         contain relevant examples.</revremark>
       </revision>

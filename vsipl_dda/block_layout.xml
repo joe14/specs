@@ -32,8 +32,14 @@
         <para>The <type>vsip_storage_format</type> enumeration literals are
         defined in terms of the <type>vsip_cmplx_mem</type> enumeration
         literals for backward compatibility. Once the latter is removed from
-        the specification, this restriction will be lifted. </para>
+        the specification, this restriction will be lifted.</para>
       </note>
+
+      <para>A <constant>VSIP_STORAGE_FORMAT_ANY</constant> format indicates to
+      the implementation that any storage format can be used. Once the
+      implementation makes a determination as to which storage format will be
+      used, the corresponding run-time layout attributes will be updated with
+      the actual storage format used.</para>
 
       <para>The storage format of real-valued data is always
       <constant>VSIP_STORAGE_FORMAT_ARRAY</constant>.</para>
