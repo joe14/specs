@@ -22,55 +22,36 @@
 
       <synopsis>typdef enum
 {
-  VSIP_STORAGE_FORMAT_ANY,
+  VSIP_STORAGE_FORMAT_ANY = 3,
   VSIP_STORAGE_FORMAT_ARRAY = 2,               /* VSIP_CMPLX_NONE */
   VSIP_STORAGE_FORMAT_SPLIT_COMPLEX = 1,       /* VSIP_CMPLX_SPLIT */
   VSIP_STORAGE_FORMAT_INTERLEAVED_COMPLEX = 0  /* VSIP_CMPLX_INTERLEAVED */
 } <emphasis role="bold">vsip_storage_format</emphasis>;</synopsis>
 
-      <para>The storage format of real-valued data is always
-      <function>VSIP_STORAGE_FORMAT_ARRAY</function>.</para>
+      <note>
+        <para>The <type>vsip_storage_format</type> enumeration literals are
+        defined in terms of the <type>vsip_cmplx_mem</type> enumeration
+        literals for backward compatibility. Once the latter is removed from
+        the specification, this restriction will be lifted. </para>
+      </note>
 
-      <para>For complex data, a <function>VSIP_STORAGE_FORMAT_ARRAY</function>
+      <para>The storage format of real-valued data is always
+      <constant>VSIP_STORAGE_FORMAT_ARRAY</constant>.</para>
+
+      <para>For complex data, a <constant>VSIP_STORAGE_FORMAT_ARRAY</constant>
       format indicates that the complex data is held in an array of type
       <function>vsip_cscalar_<replaceable>p</replaceable>[]</function>.</para>
 
-      <para>A <function>VSIP_STORAGE_FORMAT_SPLIT_COMPLEX</function> format
+      <para>A <constant>VSIP_STORAGE_FORMAT_SPLIT_COMPLEX</constant> format
       indicates that the complex data is held in two distinct arrays of type
       <function><replaceable>p</replaceable>[]</function>, with one array
       containing the real values and the other containing the imaginary
       values.</para>
 
-      <para>A <function>VSIP_STORAGE_FORMAT_INTERLEAVED_COMPLEX</function>
+      <para>A <constant>VSIP_STORAGE_FORMAT_INTERLEAVED_COMPLEX</constant>
       format indicates that the complex data is held in an array of type
       <function><replaceable>p</replaceable>[]</function>, with real and
       imaginary values alternating.</para>
-    </section>
-
-    <section>
-      <title>Complex Storage Format</title>
-
-      <para>Enumerated type for the preferred memory storage layout of complex
-      data.</para>
-
-      <warning>
-        <para>This type was deprecated in version 1.5 of the specification and
-        will be removed in a future revision;
-        <function>vsip_storage_format</function> should be used
-        instead.</para>
-      </warning>
-
-      <synopsis>typedef enum 
-{
-  VSIP_CMPLX_INTERLEAVED = 0, /* Interleaved */
-  VSIP_CMPLX_SPLIT = 1,       /* Split, separate real and imaginary */
-  VSIP_CMPLX_NONE = 2         /* No preferred storage layout */
-} <emphasis role="bold">vsip_cmplx_mem</emphasis>;</synopsis>
-
-      <remark>NEW RTF ISSUE: Replace vsip_cmplx_mem with vsip_storage_format
-      in function and type definitions, remove the vsip_cmplx_mem type, and
-      remove the value specifications from the vsip_storage_format type
-      definition</remark>
     </section>
 
     <section>
@@ -115,13 +96,13 @@ typedef struct
   vsip_dim dim2;
 } <emphasis role="bold">vsip_dim_order</emphasis>;
 
-vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_VROW_MAJOR</emphasis> = {0, 1, 2};
-vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_MROW_MAJOR</emphasis> = {0, 1, 2};
-vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_TROW_MAJOR</emphasis> = {0, 1, 2};
+static vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_VROW_MAJOR</emphasis> = {0, 1, 2};
+static vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_MROW_MAJOR</emphasis> = {0, 1, 2};
+static vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_TROW_MAJOR</emphasis> = {0, 1, 2};
 
-vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_VCOL_MAJOR</emphasis> = {0, 1, 2};
-vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_MCOL_MAJOR</emphasis> = {1, 0, 2};
-vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_TCOL_MAJOR</emphasis> = {2, 1, 0};</synopsis>
+static vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_VCOL_MAJOR</emphasis> = {0, 1, 2};
+static vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_MCOL_MAJOR</emphasis> = {1, 0, 2};
+static vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_TCOL_MAJOR</emphasis> = {2, 1, 0};</synopsis>
 
       <remark>NEW RTF ISSUE: Replace the vsip_major and vsip_tmajor types with
       the vsip_dim_order type where possible and appropriate</remark>

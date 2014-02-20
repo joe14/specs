@@ -6,9 +6,9 @@
   <info>
     <title>VSIPL DDA Additions [DRAFT]</title>
 
-    <subtitle>Version 0.13</subtitle>
+    <subtitle>Version 0.14</subtitle>
 
-    <titleabbrev>VSIPL DDA Additions 0.13 [DRAFT]</titleabbrev>
+    <titleabbrev>VSIPL DDA Additions 0.14 [DRAFT]</titleabbrev>
 
     <pubdate>
       <?dbtimestamp format="Y-m-d"?>
@@ -145,6 +145,27 @@
         vsip_dda_dkdatacreate_p() function; Added examples to the
         vsip_dda_dkcost_p(), vsip_dda_ckptr_as_array_p(), and
         vsip_dda_ckptr_as_interleaved_p() functions.</revremark>
+      </revision>
+
+      <revision>
+        <revnumber>0.14</revnumber>
+
+        <date>19 Feb 2014</date>
+
+        <revremark>Moved vsip_cmplx_mem back to section 2.4, along with its
+        deprecation warning; Added a note to vsip_storage_format regarding how
+        the current literal definitions will be relaxed in a future version;
+        Added the static keyword to vsip_dim_order and vsip_dda_sync_policy
+        constant definitions to make them valid C constants; Assigned
+        VSIP_STORAGE_FORMAT_ANY a value so that it would not conflict with
+        VSIP_STORAGE_FORMAT_INTERLEAVED_COMPLEX; Added a note to
+        vsip_dda_dkdatadestroy_p() regarding destruction of VSIPL space DDA
+        buffers; Separated the data object constructors for real and complex
+        data; Re-ordered the function sections; Collapsed the complex pointer
+        type function definitions by adding the replaceable character q;
+        Changed the word "interleaved" in function names to "inter"; Added
+        referenences from empty examples sections to function sections that
+        contain relevant examples.</revremark>
       </revision>
     </revhistory>
   </preface>

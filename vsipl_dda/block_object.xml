@@ -23,15 +23,26 @@
   VSIP_MEM_SHARED_CONST = 5   /* Shared, Constant */
 } vsip_memory_hint;</synopsis>
 
-  <para revisionflag="deleted">Enumerated type for the preferred memory
-  storage layout of complex data.</para>
+  <para>Enumerated type for the preferred memory storage layout of complex
+  data.</para>
 
-  <synopsis revisionflag="deleted">typedef enum 
+  <synopsis>typedef enum 
 {
   VSIP_CMPLX_INTERLEAVED = 0, /* Interleaved */
   VSIP_CMPLX_SPLIT = 1,       /* Split, separate real and imaginary */
   VSIP_CMPLX_NONE = 2         /* No preferred storage layout */
 } vsip_cmplx_mem;</synopsis>
+
+  <warning>
+    <para>This type was deprecated in version 1.5 of the specification and
+    will be removed in a future revision; <type>vsip_storage_format</type>
+    should be used instead.</para>
+  </warning>
+
+  <remark>NEW RTF ISSUE: Replace vsip_cmplx_mem with vsip_storage_format in
+  function and type definitions, remove the vsip_cmplx_mem type, and remove
+  the value specifications from the vsip_storage_format type
+  definition</remark>
 
   <para>Object type for a block of boolean data.</para>
 
