@@ -53,15 +53,15 @@ include the following Cygwin packages. Use the Cygwin setup program
 
 In the case of `libxml2` and `libxslt`, a specific version is recommended; the
 version is less important for the other packages.
- 
-**NOTE**
+
+> **NOTE**
 > When installing Cygwin, use the `-B` option if you do not have administrative
 > rights and want to install a user-only copy. For example, from a Windows
 > command line terminal,
->
-> ...
-> C:\> setup_x86_64.exe -B`
-> ...
+> 
+> ```
+> C:\> setup_x86_64.exe -B
+> ```
 
 ### Java ###
 
@@ -82,7 +82,7 @@ Java HotSpot(TM) 64-Bit Server VM (build 23.6-b04, mixed mode)
 Next download and extract the binary distribution of Apache FOP 1.1 and put the
 `fop` binary on your path.
 
-...
+```
 $ wget \
 http://archive.apache.org/dist/xmlgraphics/fop/binaries/fop-1.1-bin.tar.gz
 $ tar xf fop-1.1-bin.tar.gz
@@ -92,7 +92,7 @@ export PATH" >> ~/.bash_profile
 export PATH="`pwd`/fop-1.1:${PATH}"
 $ fop -version
 FOP Version 1.1
-...
+```
 
 ### JEuclid-FOP ###
 
@@ -123,13 +123,13 @@ Download and extract Stefan's copy of the the JEuclid FOP plugin binary
 distribution. Once extracted, add the `jeuclid-core.jar` and `jeuclid-fop.jar`
 Java archives to your FOP library path.
 
-...
+```
 $ wget \
 https://to.be.determined
 $ tar xf jeuclid-fop-stefan.tar.gz
 $ cp jeuclid-fop-stefan/jeuclid-core.jar <YOUR_FOP1.1_DIR>/lib
 $ cp jeuclid-fop-stefan/jeuclid-fop.jar <YOUR_FOP1.1_DIR>/lib
-...
+```
 
 Replace `<YOUR_FOP1.1_DIR>` above with the location of your FOP 1.1
 installation, e.g. `/cygwin/home/user/fop-1.1`.
@@ -144,20 +144,20 @@ the "build" process, you should download a copy of the dockbook XSL namespace.
 Download version 1.78.1 of the docbook XSL namespace from the
 [Dockbook Project](http://docbook.sourceforge.net/) website and extract it.
 
-...
+```
 $ wget \
 http://softlayer-ams.dl.sourceforge.net/project/docbook/docbook-xsl-ns/1.78.1/docbook-xsl-ns-1.78.1.tar.bz2
 $ tar xf docbook-xsl-ns-1.78.1.tar.bz2
-...
+```
 
 Get the Specification Source
 --------------------------------------------------------------------------------
 
 Use `git` to checkout the specification "source."
 
-...
+```
 $ git clone https://github.com/vsip/specs.git
-...
+```
 
 If you are using a local copy of the docbook XSL namespace, you will need to
 update the specification XSL files to point to your local copy instead of the
@@ -169,7 +169,7 @@ top of the `xhtml.xsl` file to point to your local copy. For example,
 
 ```xml
 <xsl:import href="http://docbook.sourceforge.net/release/xsl-ns/current/xhtml/chunk-changebars.xsl"/>
-...
+```
 
 might change to
 
@@ -196,10 +196,10 @@ Generate a PDF
 Generating a PDF is as simple as invoking `make` from the directory
 corresponding to the specification that you want to generate. For example,
 
-...
+```
 $ cd vsipl
 $ make clean; make all
-...
+```
 
 By default the generated PDFs will not include any comments (i.e. contents
 surrounded with the docbook `<remark>` tag), nor will they indicate any changed
@@ -208,8 +208,8 @@ change indication can be enabled by setting the `COMMENTS` and/ or `CHANGES`
 environment variables to `1`. For example, to generate PDFs both containing
 comments and indicating changes,
 
-...
+```
 $ cd vsipl
 $ make clean; COMMENTS=1 CHANGES=1 make all
-...
+```
 
