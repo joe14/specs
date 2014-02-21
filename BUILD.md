@@ -125,7 +125,7 @@ Java archives to your FOP library path.
 
 ```
 $ wget \
-https://to.be.determined
+https://drive.google.com/file/d/0B3BmMfAWYNQKeUZkVkVYeXA2Uk0/edit?usp=sharing
 $ tar xf jeuclid-fop-stefan.tar.gz
 $ cp jeuclid-fop-stefan/jeuclid-core.jar <YOUR_FOP1.1_DIR>/lib
 $ cp jeuclid-fop-stefan/jeuclid-fop.jar <YOUR_FOP1.1_DIR>/lib
