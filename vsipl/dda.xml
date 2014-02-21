@@ -149,7 +149,7 @@ static vsip_dda_sync_policy const <emphasis role="bold">VSIP_DDA_SYNC_POLICY_COP
 
         <itemizedlist>
           <listitem>
-            <para>Multiple <constant>VSIP_SYNC_POLICY_IN</constant> data
+            <para>Multiple <constant>VSIP_DDA_SYNC_POLICY_IN</constant> data
             objects may access a given view at any given point in time.</para>
           </listitem>
 
@@ -161,17 +161,17 @@ static vsip_dda_sync_policy const <emphasis role="bold">VSIP_DDA_SYNC_POLICY_COP
           </listitem>
 
           <listitem>
-            <para>Only one <constant>VSIP_SYNC_POLICY_OUT</constant> data
+            <para>Only one <constant>VSIP_DDA_SYNC_POLICY_OUT</constant> data
             object may access a given view at any given point in time. As long
             as a view is being referenced through a
-            <constant>VSIP_SYNC_POLICY_OUT</constant> data object, the view
-            may not be modified through any other means.</para>
+            <constant>VSIP_DDA_SYNC_POLICY_OUT</constant> data object, the
+            view may not be modified through any other means.</para>
           </listitem>
 
           <listitem>
-            <para>If a <constant>VSIP_SYNC_POLICY_OUT</constant> data object
-            references a <emphasis>sub-view</emphasis> of a given view, the
-            view's non-aliased elements may still be written to by other
+            <para>If a <constant>VSIP_DDA_SYNC_POLICY_OUT</constant> data
+            object references a <emphasis>sub-view</emphasis> of a given view,
+            the view's non-aliased elements may still be written to by other
             means, including other data objects.</para>
           </listitem>
 
