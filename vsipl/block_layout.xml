@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<section version="5.0" xmlns="http://docbook.org/ns/docbook"
+<section revisionflag="added" version="5.0"
+         xmlns="http://docbook.org/ns/docbook"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns6="http://www.w3.org/1999/xlink"
          xmlns:ns5="http://www.w3.org/2000/svg"
@@ -7,8 +8,6 @@
          xmlns:ns="http://docbook.org/ns/docbook"
          xmlns:m="http://www.w3.org/1998/Math/MathML">
   <title>Block Layout</title>
-
-  <para><remark>The following will be added as section 2.5.</remark></para>
 
   <section>
     <title>Type Definitions</title>
@@ -81,8 +80,6 @@
   VSIP_PACK_TYPE_ALIGNED_512,
   VSIP_PACK_TYPE_ALIGNED_1024
 } <emphasis role="bold">vsip_pack_type</emphasis>;</synopsis>
-
-      <remark>NEW RTF ISSUE: Add text to describe the vsip_pack_type</remark>
     </section>
 
     <section>
@@ -109,9 +106,6 @@ static vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_TROW_MAJOR</emp
 static vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_VCOL_MAJOR</emphasis> = {0, 1, 2};
 static vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_MCOL_MAJOR</emphasis> = {1, 0, 2};
 static vsip_dim_order const <emphasis role="bold">VSIP_DIM_ORDER_TCOL_MAJOR</emphasis> = {2, 1, 0};</synopsis>
-
-      <remark>NEW RTF ISSUE: Replace the vsip_major and vsip_tmajor types with
-      the vsip_dim_order type where possible and appropriate</remark>
     </section>
 
     <section>

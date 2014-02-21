@@ -512,7 +512,7 @@ typedef struct vsip_randomstate vsip_randstate;</synopsis>
 } vsip_rng;</synopsis>
   </section>
 
-  <section>
+  <section version="5.0">
     <title>Block Object</title>
 
     <para>Hint used when allocating VSIPL data memory for a block
@@ -537,6 +537,12 @@ typedef struct vsip_randomstate vsip_randstate;</synopsis>
   VSIP_CMPLX_SPLIT = 1,       /* Split, separate real and imaginary */
   VSIP_CMPLX_NONE = 2         /* No preferred storage layout */
 } vsip_cmplx_mem;</synopsis>
+
+    <warning revisionflag="added">
+      <para>This type was deprecated in version 1.5 of the specification and
+      will be removed in a future revision; <type>vsip_storage_format</type>
+      should be used instead.</para>
+    </warning>
 
     <para>Object type for a block of boolean data.</para>
 
@@ -573,6 +579,8 @@ typedef struct vsip_cblockobject_i vsip_cblock_i;
 struct vsip_cblockobject_f;
 typedef struct vsip_cblockobject_f vsip_cblock_f;</synopsis>
   </section>
+
+  <xi:include href="block_layout.xml"/>
 
   <section>
     <title>Vector View</title>

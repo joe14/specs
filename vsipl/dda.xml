@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<chapter label="4" version="5.0" xml:id="dda"
+<chapter revisionflag="added" version="5.0" xml:id="dda"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xi="http://www.w3.org/2001/XInclude"
          xmlns:ns6="http://www.w3.org/1999/xlink"
@@ -8,9 +8,6 @@
          xmlns:ns="http://docbook.org/ns/docbook"
          xmlns:m="http://www.w3.org/1998/Math/MathML">
   <title>Direct Data Access Functions</title>
-
-  <para><remark>The following will be added as chapter 4; subsequent chapters
-  will be renumbered accordingly.</remark></para>
 
   <section>
     <title>Introduction</title>
