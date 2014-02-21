@@ -31,17 +31,15 @@
   
   <!-- used to specify whether to use XSL-FO 1.1 changebars -->
   <xsl:param name="use.changebars">0</xsl:param>
-  <!-- used to specify whether to color text to mark changes -->
-  <xsl:param name="use.text.colors">1</xsl:param>
   
   <!-- added text styling params -->
-  <xsl:param name="added.color">green</xsl:param>
+  <xsl:param name="added.color">blue</xsl:param>
   <xsl:param name="added.background">inherit</xsl:param>
   <xsl:param name="added.decoration">none</xsl:param>
-  <xsl:param name="added.style">italic</xsl:param>
+  <xsl:param name="added.style">normal</xsl:param>
   
   <!-- deleted text styling params -->
-  <xsl:param name="deleted.color">red</xsl:param>
+  <xsl:param name="deleted.color">blue</xsl:param>
   <xsl:param name="deleted.background">inherit</xsl:param>
   <xsl:param name="deleted.decoration">line-through</xsl:param>
   <xsl:param name="deleted.style">normal</xsl:param>
@@ -75,25 +73,25 @@
   <xsl:attribute-set name="nonwrappable.atts">
     <xsl:attribute name="color">
       <xsl:choose>
-        <xsl:when test="$use.text.colors != 0"><xsl:value-of select="$nonwrappable.color"/></xsl:when>
+        <xsl:when test="$show.changes != 0"><xsl:value-of select="$nonwrappable.color"/></xsl:when>
         <xsl:otherwise>inherit</xsl:otherwise>
       </xsl:choose>
       </xsl:attribute>
     <xsl:attribute name="background-color">
       <xsl:choose>
-        <xsl:when test="$use.text.colors != 0"><xsl:value-of select="$nonwrappable.background"/></xsl:when>
+        <xsl:when test="$show.changes != 0"><xsl:value-of select="$nonwrappable.background"/></xsl:when>
         <xsl:otherwise>inherit</xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
     <xsl:attribute name="text-decoration">
       <xsl:choose>
-        <xsl:when test="$use.text.colors != 0"><xsl:value-of select="$nonwrappable.decoration"/></xsl:when>
+        <xsl:when test="$show.changes != 0"><xsl:value-of select="$nonwrappable.decoration"/></xsl:when>
         <xsl:otherwise>inherit</xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
     <xsl:attribute name="font-style">
       <xsl:choose>
-        <xsl:when test="$use.text.colors != 0"><xsl:value-of select="$nonwrappable.style"/></xsl:when>
+        <xsl:when test="$show.changes != 0"><xsl:value-of select="$nonwrappable.style"/></xsl:when>
         <xsl:otherwise>inherit</xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
@@ -103,32 +101,32 @@
   <xsl:attribute-set name="ancestor.revision.atts">
     <xsl:attribute name="color">
       <xsl:choose>
-        <xsl:when test="ancestor-or-self::*[@revisionflag='added'] and $use.text.colors != 0"><xsl:value-of select="$added.color"/></xsl:when>
-        <xsl:when test="ancestor-or-self::*[@revisionflag='deleted'] and $use.text.colors != 0"><xsl:value-of select="$deleted.color"/></xsl:when>
-        <xsl:when test="ancestor-or-self::*[@revisionflag='changed'] and $use.text.colors != 0"><xsl:value-of select="$nonwrappable.color"/></xsl:when>
+        <xsl:when test="ancestor-or-self::*[@revisionflag='added'] and $show.changes != 0"><xsl:value-of select="$added.color"/></xsl:when>
+        <xsl:when test="ancestor-or-self::*[@revisionflag='deleted'] and $show.changes != 0"><xsl:value-of select="$deleted.color"/></xsl:when>
+        <xsl:when test="ancestor-or-self::*[@revisionflag='changed'] and $show.changes != 0"><xsl:value-of select="$nonwrappable.color"/></xsl:when>
         <xsl:otherwise>inherit</xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
     <xsl:attribute name="background-color">
       <xsl:choose>
-        <xsl:when test="ancestor-or-self::*[@revisionflag='added'] and $use.text.colors != 0"><xsl:value-of select="$added.background"/></xsl:when>
-        <xsl:when test="ancestor-or-self::*[@revisionflag='deleted'] and $use.text.colors != 0"><xsl:value-of select="$deleted.background"/></xsl:when>
+        <xsl:when test="ancestor-or-self::*[@revisionflag='added'] and $show.changes != 0"><xsl:value-of select="$added.background"/></xsl:when>
+        <xsl:when test="ancestor-or-self::*[@revisionflag='deleted'] and $show.changes != 0"><xsl:value-of select="$deleted.background"/></xsl:when>
         <xsl:when test="@revisionflag='changed' and ((count(text())=1 and count(node())=1) or count(node())=0)"><xsl:value-of select="$nonwrappable.background"/></xsl:when>
         <xsl:otherwise>inherit</xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
     <xsl:attribute name="text-decoration">
       <xsl:choose>
-        <xsl:when test="ancestor-or-self::*[@revisionflag='added'] and $use.text.colors != 0"><xsl:value-of select="$added.decoration"/></xsl:when>
-        <xsl:when test="ancestor-or-self::*[@revisionflag='deleted'] and $use.text.colors != 0"><xsl:value-of select="$deleted.decoration"/></xsl:when>
+        <xsl:when test="ancestor-or-self::*[@revisionflag='added'] and $show.changes != 0"><xsl:value-of select="$added.decoration"/></xsl:when>
+        <xsl:when test="ancestor-or-self::*[@revisionflag='deleted'] and $show.changes != 0"><xsl:value-of select="$deleted.decoration"/></xsl:when>
         <xsl:when test="@revisionflag='changed' and ((count(text())=1 and count(node())=1) or count(node())=0)"><xsl:value-of select="$nonwrappable.decoration"/></xsl:when>
         <xsl:otherwise>inherit</xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
     <xsl:attribute name="font-style">
       <xsl:choose>
-        <xsl:when test="ancestor-or-self::*[@revisionflag='added'] and $use.text.colors != 0"><xsl:value-of select="$added.style"/></xsl:when>
-        <xsl:when test="ancestor-or-self::*[@revisionflag='deleted'] and $use.text.colors != 0"><xsl:value-of select="$deleted.style"/></xsl:when>
+        <xsl:when test="ancestor-or-self::*[@revisionflag='added'] and $show.changes != 0"><xsl:value-of select="$added.style"/></xsl:when>
+        <xsl:when test="ancestor-or-self::*[@revisionflag='deleted'] and $show.changes != 0"><xsl:value-of select="$deleted.style"/></xsl:when>
         <xsl:when test="@revisionflag='changed' and ((count(text())=1 and count(node())=1) or count(node())=0)"><xsl:value-of select="$nonwrappable.style"/></xsl:when>
         <xsl:otherwise>inherit</xsl:otherwise>
       </xsl:choose>
@@ -139,29 +137,29 @@
   <xsl:attribute-set name="revision.atts">
     <xsl:attribute name="color">
       <xsl:choose>
-        <xsl:when test="@revisionflag='added' and $use.text.colors != 0"><xsl:value-of select="$added.color"/></xsl:when>
-        <xsl:when test="@revisionflag='deleted' and $use.text.colors != 0"><xsl:value-of select="$deleted.color"/></xsl:when>
+        <xsl:when test="@revisionflag='added' and $show.changes != 0"><xsl:value-of select="$added.color"/></xsl:when>
+        <xsl:when test="@revisionflag='deleted' and $show.changes != 0"><xsl:value-of select="$deleted.color"/></xsl:when>
         <xsl:otherwise>inherit</xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
     <xsl:attribute name="background-color">
       <xsl:choose>
-        <xsl:when test="@revisionflag='added' and $use.text.colors != 0"><xsl:value-of select="$added.background"/></xsl:when>
-        <xsl:when test="@revisionflag='deleted' and $use.text.colors != 0"><xsl:value-of select="$deleted.background"/></xsl:when>
+        <xsl:when test="@revisionflag='added' and $show.changes != 0"><xsl:value-of select="$added.background"/></xsl:when>
+        <xsl:when test="@revisionflag='deleted' and $show.changes != 0"><xsl:value-of select="$deleted.background"/></xsl:when>
         <xsl:otherwise>inherit</xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
     <xsl:attribute name="text-decoration">
       <xsl:choose>
-        <xsl:when test="@revisionflag='added' and $use.text.colors != 0"><xsl:value-of select="$added.decoration"/></xsl:when>
-        <xsl:when test="@revisionflag='deleted' and $use.text.colors != 0"><xsl:value-of select="$deleted.decoration"/></xsl:when>
+        <xsl:when test="@revisionflag='added' and $show.changes != 0"><xsl:value-of select="$added.decoration"/></xsl:when>
+        <xsl:when test="@revisionflag='deleted' and $show.changes != 0"><xsl:value-of select="$deleted.decoration"/></xsl:when>
         <xsl:otherwise>inherit</xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
     <xsl:attribute name="font-style">
       <xsl:choose>
-        <xsl:when test="@revisionflag='added' and $use.text.colors != 0"><xsl:value-of select="$added.style"/></xsl:when>
-        <xsl:when test="@revisionflag='deleted' and $use.text.colors != 0"><xsl:value-of select="$deleted.style"/></xsl:when>
+        <xsl:when test="@revisionflag='added' and $show.changes != 0"><xsl:value-of select="$added.style"/></xsl:when>
+        <xsl:when test="@revisionflag='deleted' and $show.changes != 0"><xsl:value-of select="$deleted.style"/></xsl:when>
         <xsl:otherwise>inherit</xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>

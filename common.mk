@@ -11,10 +11,12 @@ fop := fop
 # Build instructions
 ########################################################################
 
-ifeq ($(DRAFT),y)
+ifeq ($(COMMENTS),1)
 XSLTPROC_FLAGS += --param show.comments 1
-else
-XSLTPROC_FLAGS += --param show.comments 0
+endif
+
+ifeq ($(CHANGES),1)
+XSLTPROC_FLAGS += --param show.changes 1
 endif
 
 # Generate XHTML target db

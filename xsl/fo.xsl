@@ -16,7 +16,8 @@
 <xsl:param name="target.database.document"></xsl:param>
 <xsl:param name="variablelist.as.blocks" select="1"></xsl:param> 
 <xsl:param name="section.autolabel" select="1"></xsl:param>
-<xsl:param name="show.comments"/>
+<xsl:param name="show.comments" select="0"/>
+<xsl:param name="show.changes" select="0"/>
 
 <xsl:attribute-set name="book.titlepage.verso.style" 
 		   use-attribute-sets="component.titlepage.properties"/>
