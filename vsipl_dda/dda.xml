@@ -563,8 +563,8 @@ int <emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>cost_<replaceabl
     <section xml:id="vsip_dda_dkrequired_buffer_size_p">
       <title>vsip_dda_<constant><replaceable>dk</replaceable></constant>required_buffer_size_<constant><replaceable>p</replaceable></constant></title>
 
-      <para>This function gets the size of the buffer required for direct data
-      access.</para>
+      <para>This function gets the size (in number of elements) of the buffer
+      required for direct data access.</para>
 
       <variablelist>
         <varlistentry>
@@ -656,8 +656,9 @@ vsip_length <emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>required
           <term>Return Value</term>
 
           <listitem>
-            <para>This function returns the size of the DDA buffer required to
-            hold the view's data while it is accessed via DDA.</para>
+            <para>This function returns the size (in number of elements) of
+            the DDA buffer required to hold the view's data while it is
+            accessed via DDA.</para>
           </listitem>
         </varlistentry>
 
@@ -738,7 +739,7 @@ vsip_length <emphasis role="bold">vsip_dda_c<replaceable>k</replaceable>required
     <section xml:id="vsip_dda_kdatacreate_p">
       <title>vsip_dda_<constant><replaceable>dk</replaceable></constant>datacreate_<constant><replaceable>p</replaceable></constant></title>
 
-      <para>This function creates a DDA data object for real data.</para>
+      <para>This function creates a DDA data object.</para>
 
       <variablelist>
         <varlistentry>
@@ -841,8 +842,12 @@ vsip_dda_c<replaceable>k</replaceable>data_<replaceable>f</replaceable> *<emphas
 
                 <listitem>
                   <para>This argument provides pre-allocated user space memory
-                  for use by the implementation as the DDA buffer; this memory
-                  must be at least as big as the size reported by
+                  for use by the implementation as the DDA buffer. For real
+                  views, this memory must be at least as big as the size
+                  reported by
+                  <function>vsip_dda_<replaceable>dk</replaceable>required_buffer_size_<replaceable>p</replaceable>()</function>.
+                  For complex views, this memory must be at least as big as
+                  twice the size reported by
                   <function>vsip_dda_<replaceable>dk</replaceable>required_buffer_size_<replaceable>p</replaceable>()</function>.
                   If null is provided, a VSIPL space DDA buffer will be used,
                   or direct access to the view memory will be provided, as

@@ -163,9 +163,10 @@
         buffers; Re-ordered the function sections; Collapsed the complex
         pointer type function definitions by adding the replaceable character
         q; Changed the word "interleaved" in function names to "inter"; Added
-        a description of the VSIP_STORAGE_FORMAT_ANY storage format; Added
-        referenences from empty examples sections to function sections that
-        contain relevant examples.</revremark>
+        a description of the VSIP_STORAGE_FORMAT_ANY storage format;
+        Compressed the examples; Added referenences from empty examples
+        sections to function sections that contain relevant
+        examples.</revremark>
       </revision>
     </revhistory>
   </preface>
