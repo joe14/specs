@@ -32,6 +32,10 @@
     format, and <constant>split</constant> for the complex pointer type
     associated with the <constant>VSIP_STORAGE_FORMAT_SPLIT_COMPLEX</constant>
     storage format.</para>
+
+    <para>The examples in this section demonstrate the DDA API; they represent
+    valid code, but may not be functionally complete. TODO comments indicate
+    functionality that could be added to make the examples more robust.</para>
   </section>
 
   <section>

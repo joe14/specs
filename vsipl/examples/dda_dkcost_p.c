@@ -7,7 +7,7 @@ int main(int argc, char **argv)
     vsip_datalayout lyt;
     int cost;        
     vsip_init((void *)0);
-    if (NULL == (vw = vsip_cvcreate_f(N, VSIP_MEM_NONE))) return -1;
+    vw = vsip_cvcreate_f(N, VSIP_MEM_NONE); /* TODO: Handle error */
     lyt.dim = 1;
     lyt.storage_format = VSIP_STORAGE_FORMAT_ARRAY;
     lyt.packing = VSIP_PACK_TYPE_DENSE;
